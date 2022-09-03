@@ -44,27 +44,29 @@ class _MainPageState extends State<MainPage> {
   ];
 
   final TextEditingController _username = TextEditingController();
-  final user = FirebaseAuth.instance.currentUser!;
+  // final user = FirebaseAuth.instance.currentUser!;
   Future<void> _init() async {
     // String? uid = await _authViewModel.storage.read(key: "uid");
     // await Future.wait([
-    await _authViewModel.getUserInfo(uid: user.uid);
+    // _authViewModel.currentUser();
+    await _authViewModel.getUserInfo();
     await _authViewModel.getMainPageInfo(
-        // uid: _authViewModel.user!.uid,
-        uid: user.uid,
-        gender: _authViewModel.userModel!.gender);
-    if (_authViewModel.genderModelList.value != null) {
-      _authViewModel.genderModelList.value!.forEach((e) {
-        print("object $e");
-      });
-    }
+        uid: _authViewModel.user!.uid,
+        // uid: user.uid,
+        gender: _authViewModel.userModel.value!.gender);
+    // if (_authViewModel.genderModelList.value != null) {
+    //   _authViewModel.genderModelList.value!.forEach((e) {
+    //     print("object $e");
+    //   });
+    // }
+
     // ]);
   }
 
   @override
   void initState() {
-    _init();
-
+    // _init();
+    _authViewModel.init();
     super.initState();
   }
 
@@ -100,7 +102,7 @@ class _MainPageState extends State<MainPage> {
               title: const Text('나의 프로필'),
               onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => myProfileScreen()));
+                    MaterialPageRoute(builder: (context) => MyProfileScreen()));
               },
             ),
             ListTile(
@@ -135,8 +137,8 @@ class _MainPageState extends State<MainPage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) =>
-                            BroadcastVideo(username: user.email!)));
+                        builder: (context) => BroadcastVideo(
+                            username: _authViewModel.user!.email!)));
               },
             ),
             ListTile(

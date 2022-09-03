@@ -1,27 +1,34 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:salondec/data/model/gender_model.dart';
 import 'package:salondec/data/model/person2.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:salondec/component/custom_love_letter.dart';
 import 'package:salondec/component/custom_alert_dialog.dart';
 
-class todaydetail extends StatefulWidget {
-  final Note note;
-  todaydetail(this.note);
+class Todaydetail extends StatefulWidget {
+  // final Note note;
+  final GenderModel genderModel;
+  Todaydetail(this.genderModel);
 
   List<String> images = ["assets/image/profile_detail1.png"];
   @override
-  _todaydetailState createState() => _todaydetailState();
+  _TodaydetailState createState() => _TodaydetailState();
 }
 
-class _todaydetailState extends State<todaydetail> {
+class _TodaydetailState extends State<Todaydetail> {
   // ignore: non_constant_identifier_names
   double update_rating = 0.0;
+  // @override
+  // void initState() {
+  //   widget.genderModel.uid);
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
-    final note = widget.note;
+    // final genderModel = widget.genderModel;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -47,19 +54,33 @@ class _todaydetailState extends State<todaydetail> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
-                            ClipOval(
-                              child: Image.asset(
-                                note.image,
-                                width: 100,
-                                height: 100,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                            (widget.genderModel.profileImageUrl != null &&
+                                    widget.genderModel.profileImageUrl != '')
+                                ? ClipOval(
+                                    child: Image.network(
+                                      widget.genderModel.profileImageUrl!,
+                                      width: 100,
+                                      height: 100,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )
+                                : Container(
+                                    decoration: BoxDecoration(
+                                        color: Colors.grey[200],
+                                        borderRadius:
+                                            BorderRadius.circular(50)),
+                                    width: 100,
+                                    height: 100,
+                                    child: Icon(
+                                      Icons.camera_alt,
+                                      color: Colors.grey[800],
+                                    ),
+                                  ),
                             const Padding(
                               padding: EdgeInsets.all(4.0),
                             ),
                             Text(
-                              note.title,
+                              widget.genderModel.name ?? "",
                               style: TextStyle(
                                   fontSize: 16.0, fontWeight: FontWeight.w800),
                             ),
@@ -143,11 +164,26 @@ class _todaydetailState extends State<todaydetail> {
                 height: 250.0,
                 child: Stack(
                   children: <Widget>[
-                    Positioned.fill(
-                        child: Image.asset(
-                      "assets/image/profile_detail1.png",
-                      fit: BoxFit.fitHeight,
-                    ))
+                    (widget.genderModel.imgUrl1 != null &&
+                            widget.genderModel.imgUrl1 != '')
+                        ? Positioned.fill(
+                            //   child: Image.asset(
+                            // "assets/image/profile_detail1.png",
+                            child: Image.network(
+                            widget.genderModel.imgUrl1!,
+                            fit: BoxFit.fitHeight,
+                          ))
+                        : Container(
+                            decoration: BoxDecoration(
+                                color: Colors.grey[200],
+                                borderRadius: BorderRadius.circular(50)),
+                            width: 100,
+                            height: 100,
+                            child: Icon(
+                              Icons.camera_alt,
+                              color: Colors.grey[800],
+                            ),
+                          ),
                   ],
                 ),
               ),
@@ -158,19 +194,34 @@ class _todaydetailState extends State<todaydetail> {
                     title: Padding(
                         padding: const EdgeInsets.only(bottom: 15.0),
                         child: Text('Q 자기소개 ?')),
-                    subtitle: Text(
-                        '반갑습니다. 진지한 만남을 하고 싶어요. 티키타카가 잘 맞는 만남을 가지고 싶습니다 :) ')),
+                    subtitle: Text(widget.genderModel.introduction ?? "")
+                    // : Text(
+                    // '반갑습니다. 진지한 만남을 하고 싶어요. 티키타카가 잘 맞는 만남을 가지고 싶습니다 :) ')),
+                    ),
               ),
               Container(
                 color: Color(0xffF1F1F1),
                 height: 250.0,
                 child: Stack(
                   children: <Widget>[
-                    Positioned.fill(
-                        child: Image.asset(
-                      "assets/image/profile_detail2.png",
-                      fit: BoxFit.fitHeight,
-                    ))
+                    (widget.genderModel.imgUrl2 != null &&
+                            widget.genderModel.imgUrl2 != '')
+                        ? Positioned.fill(
+                            child: Image.network(
+                            widget.genderModel.imgUrl2!,
+                            fit: BoxFit.fitHeight,
+                          ))
+                        : Container(
+                            decoration: BoxDecoration(
+                                color: Colors.grey[200],
+                                borderRadius: BorderRadius.circular(50)),
+                            width: 100,
+                            height: 100,
+                            child: Icon(
+                              Icons.camera_alt,
+                              color: Colors.grey[800],
+                            ),
+                          ),
                   ],
                 ),
               ),
@@ -181,7 +232,8 @@ class _todaydetailState extends State<todaydetail> {
                     title: Padding(
                         padding: const EdgeInsets.only(bottom: 15.0),
                         child: Text('Q 제 성격은 ?')),
-                    subtitle: Text('#상냥한 #유머있는 #지적인')),
+                    subtitle: Text(widget.genderModel.character ?? "")),
+                // :Text('#상냥한 #유머있는 #지적인')),
               ),
               Container(
                 child: ListTile(
@@ -197,11 +249,24 @@ class _todaydetailState extends State<todaydetail> {
                 height: 250.0,
                 child: Stack(
                   children: <Widget>[
-                    Positioned.fill(
-                        child: Image.asset(
-                      "assets/image/profile_detail3.png",
-                      fit: BoxFit.fitHeight,
-                    ))
+                    (widget.genderModel.imgUrl3 != null &&
+                            widget.genderModel.imgUrl3 != '')
+                        ? Positioned.fill(
+                            child: Image.network(
+                            widget.genderModel.imgUrl3!,
+                            fit: BoxFit.fitHeight,
+                          ))
+                        : Container(
+                            decoration: BoxDecoration(
+                                color: Colors.grey[200],
+                                borderRadius: BorderRadius.circular(50)),
+                            width: 100,
+                            height: 100,
+                            child: Icon(
+                              Icons.camera_alt,
+                              color: Colors.grey[800],
+                            ),
+                          ),
                   ],
                 ),
               ),
@@ -212,7 +277,8 @@ class _todaydetailState extends State<todaydetail> {
                     title: Padding(
                         padding: const EdgeInsets.only(bottom: 15.0),
                         child: Text('Q 요즘 어떤 것에 관심이 있나요?')),
-                    subtitle: Text('일찍 결혼하고 싶어요. 결혼에 관심이 있습니다.')),
+                    subtitle: Text(widget.genderModel.interest ?? "")),
+                // :Text('일찍 결혼하고 싶어요. 결혼에 관심이 있습니다.')),
               ),
             ]),
           ),

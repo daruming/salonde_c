@@ -17,7 +17,12 @@ class _TextchatDetailState extends State<TextchatDetail> {
     final chat = widget.chat;
 
     return Scaffold(
-        resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        // Here we take the value from the MyHomePage object that was created by
+        // the App.build method, and use it to set our appbar title.
+        title: Text("음성살롱 내용"),
+      ),
         body: Column(children: <Widget>[
           Flexible(
               child: ListTile(

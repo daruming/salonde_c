@@ -168,13 +168,19 @@ class _LoginPageState extends State<LoginPage> {
         //     email: _email.text.trim(), password: _password.text.trim());
         await _authViewModel.signInWithEmail(
             email: _email.text.trim(), password: _password.text.trim());
-        await _authViewModel.getUserInfo(uid: _authViewModel.user!.uid);
-        if (mounted) {
+        if (_authViewModel.user != null) {
+          await _authViewModel.getUserInfo();
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('살롱드청담에 오신것을 환영합니다!')),
+            );
+          }
+          Get.toNamed(MainPage.routeName);
+        } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('살롱드청담에 오신것을 환영합니다!')),
+            SnackBar(content: Text("로그인에 실패했습니다.")),
           );
         }
-        Get.toNamed(MainPage.routeName);
       } on FirebaseAuthException catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(e.toString())),

@@ -9,40 +9,46 @@ class FavoriteScreen extends StatefulWidget {
   _FavoriteScreenState createState() => _FavoriteScreenState();
 }
 
-class _FavoriteScreenState extends State<FavoriteScreen> {
+class _FavoriteScreenState extends State<FavoriteScreen>  with SingleTickerProviderStateMixin {
   int pageIndex = 0;
-  List<Widget> pageList = <Widget>[
-    MatchingScreen(),
-    MatchedScreen(),
-    PassawayScreen(),
+  late final _tabController;
+
+  final List<Widget> favoriteTabs = <Tab>[
+    new Tab(text: "매칭된이성"),
+    new Tab(text: "진행중인이성"),
+    new Tab(text: "지나간이성"),
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _tabController = new TabController(vsync: this, length: favoriteTabs.length);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: new ThemeData(
-        accentColor: Colors.black,
-      ),
-      debugShowCheckedModeBanner: false,
-      home: DefaultTabController(
-        length: 3,
-        child: Scaffold(
+    return Scaffold(
           appBar: TabBar(
+            controller: _tabController,
             labelColor: Colors.black,
             unselectedLabelColor: Color(0xffD2D2D2),
-            tabs: <Widget>[
-              Tab(text: "매칭된이성"),
-              Tab(text: "진행중인이성"),
-              Tab(text: "지나간이성")
-            ],
+            indicatorColor: Colors.black,
+            tabs: favoriteTabs
           ),
-          body: TabBarView(children: [
-            MatchedScreen(),
-            MatchingScreen(),
-            PassawayScreen(),
-          ]),
+          body: TabBarView(
+            controller: _tabController,
+            children: [
+              MatchedScreen(),
+              MatchingScreen(),
+              PassawayScreen(),
+          ]
         ),
-      ),
     );
   }
 }
