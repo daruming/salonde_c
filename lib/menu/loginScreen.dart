@@ -5,6 +5,7 @@ import 'package:salondec/core/viewState.dart';
 import 'package:salondec/page/mainPage.dart';
 import 'package:salondec/page/viewmodel/auth_viewmodel.dart';
 import 'package:salondec/widgets/login/login_page.dart';
+import 'package:salondec/widgets/login/signup_page.dart';
 
 //This is related to "https://www.youtube.com/watch?v=4vKiJZNPhss&ab_channel=JohannesMilke"
 
@@ -22,7 +23,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
-    _authViewModel.init();
+    // if (_authViewModel.initNum == 0) {
+    // _authViewModel.init();
+    // }
     super.initState();
   }
 
@@ -40,21 +43,16 @@ class _LoginScreenState extends State<LoginScreen> {
             return Center(child: Text("something went wrong"));
           } else if (snapshot.hasData) {
             print("로그인되어있어용");
-            return Obx(() {
-              if (_authViewModel.homeViewState is Loaded) {
-                return MainPage();
-              }
-              return Center(
-                child: Container(
-                  height: 50,
-                  width: 50,
-                  child: const CircularProgressIndicator(color: Colors.amber),
-                ),
-              );
-            });
+            return MainPage();
           } else {
-            print("로그인하러가용");
-            return LoginPage();
+            return Obx(() {
+              if (_authViewModel.userSignUpState.value) {
+                return SignupPage();
+              } else {
+                print("로그인하러가용");
+                return LoginPage();
+              }
+            });
           }
         });
   }

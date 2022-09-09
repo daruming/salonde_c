@@ -7,9 +7,9 @@ import 'package:salondec/component/page_heading.dart';
 
 import 'package:get/get.dart';
 import 'package:salondec/core/define.dart';
+import 'package:salondec/menu/loginScreen.dart';
 import 'package:salondec/page/mainPage.dart';
 import 'package:salondec/page/viewmodel/auth_viewmodel.dart';
-
 
 //develop
 import 'signup_page.dart';
@@ -131,12 +131,14 @@ class _LoginPageState extends State<LoginPage> {
                                   fontWeight: FontWeight.bold),
                             ),
                             GestureDetector(
-                              onTap: () => {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const SignupPage()))
+                              onTap: () {
+                                _authViewModel.userSignUpState.value = true;
+                                // setState(() {});
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) =>
+                                //             const SignupPage()))
                               },
                               child: const Text(
                                 '가입하기',
@@ -170,13 +172,15 @@ class _LoginPageState extends State<LoginPage> {
         await _authViewModel.signInWithEmail(
             email: _email.text.trim(), password: _password.text.trim());
         if (_authViewModel.user != null) {
-          await _authViewModel.getUserInfo();
+          // await _authViewModel.getUserInfo();
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('살롱드청담에 오신것을 환영합니다!')),
             );
           }
-          Get.toNamed(MainPage.routeName);
+          // Get.toNamed(MainPage.routeName);
+          // Get.toNamed(LoginScreen.routeName);
+          // Get.until((route) => Get.currentRoute == LoginScreen.routeName);
           // } else if() {
         } else {
           if (_authViewModel.errorState == ErrorState.network) {

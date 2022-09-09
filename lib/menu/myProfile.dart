@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:intl/intl.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,17 +17,44 @@ import 'package:salondec/component/custom_input_field.dart';
 import 'package:salondec/data/model/user_model.dart';
 import 'package:salondec/page/viewmodel/auth_viewmodel.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:salondec/component/custom_alert_dialog.dart';
 
-const double _kItemExtent = 32.0;
-const List<String> _fruitNames = <String>[
-  '155 미만',
-  '155-160',
-  '161-165',
-  '166-170',
-  '171-175',
-  '176-180',
-  '181-185',
-  '186 이상',
+List<String> heightItem = [
+    "150cm","151cm","152cm","153cm","154cm",
+    "155cm","156cm","157cm","158cm","159cm",
+    "160cm","161cm","162cm","163cm","164cm",
+    "165cm","166cm","167cm","168cm","169cm",
+    "170cm","171cm","172cm","173cm","174cm",
+    "175cm","176cm","177cm","178cm","179cm",
+    "180cm","181cm","182cm","183cm","184cm",
+    "185cm","186cm","187cm","188cm","189cm",
+];
+
+List<String> bodyTypeItem = [
+    "마름","슬림한","보통","통통한","뚱뚱한"
+];
+
+List<String> religionItem = [
+    "기독도","천주교","불교","무교"
+];
+
+List<String> mbtiItem = [
+    "ISTJ","ISFJ","INFJ","INTJ","ISTP",
+    "ISFP","INFP","INTP","ESTP","ESFP",
+    "ENFP","ENTP","ESTJ","ESFJ","ENFJ",
+    "ENTJ"
+];
+
+List<String> jobItem = [
+    "CEO","의사","개인사업","변호사","아나운서","승무원","애널리스트","펀드매니저","교사",
+    "약사","투자업","한의사","치과의사","수의사","은행원","스포츠선수","첼리스트","작곡가",
+    "가수","무용수","디자이너","방송인","모델","연주자","대학원(석사)","대학원(박사)","판사",
+    "변리사","법무사","세무사","5급공무원","회계사","감정평가사","파일럿","사무관","국회의원",
+    "비서관","시의원","구의원","MD","교직원","공무원","기자","앵커","캐스터","PD","작가",
+    "건설업","마케터","요리사/셰프","치위생사","간호사","간호조무사","연구원","플로리스트",
+    "물리치료사","국내영업","해외영업","호텔리어","영양사","의료기사","미용사","관세사",
+    "피부관리사","임대업자","큐레이터","무영업","노무사","입상병리사","스포츠강사","무용강사",
+    "사회복지사","일반사무직","학부","네일아티스트","프리랜서","기타"
 ];
 
 class MyProfileScreen extends StatefulWidget {
@@ -35,7 +64,7 @@ class MyProfileScreen extends StatefulWidget {
   _MyProfileScreenState createState() => _MyProfileScreenState();
 }
 
-class _MyProfileScreenState extends State<MyProfileScreen> {
+class _MyProfileScreenState extends State<MyProfileScreen> with SingleTickerProviderStateMixin{
   //firebase_storage.FirebaseStorage storage = firebase_storage.FirebaseStorage.instance;
   AuthViewModel _authViewModel = Get.find<AuthViewModel>();
 
@@ -58,16 +87,15 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   final Random _rnd = Random();
   final user = FirebaseAuth.instance.currentUser!;
 
-  int _selectedFruit = 3;
+  int _selectedheight = 3;
 
+  int age = 0;
   @override
   void initState() {
     // _authViewModel.currentUser();
     _authViewModel.getUserInfo();
     super.initState();
-    
   }
-
 
   // This shows a CupertinoModalPopup with a reasonable fixed height which hosts CupertinoPicker.
   void _showDialog(Widget child) {
@@ -165,13 +193,23 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     print("완료");
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          title: Text("My Profile"),
+        ),
         body: Obx(() {
           return SingleChildScrollView(
-            child: Column(children: [
+              child: Column(children: [
+            const SizedBox(height: 5),
+            Text(
+              "대표사진",
+              style: const TextStyle(
+                fontSize: 18, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 5),
             Center(
               child: GestureDetector(
@@ -192,7 +230,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                             _authViewModel.userModel.value!.profileImageUrl!,
                             width: 100,
                             height: 100,
-                            fit: BoxFit.fitHeight,
+                            fit: BoxFit.cover,
                           ),
                         )
                       : _authViewModel.photoMap["profileImageUrl"] != null
@@ -202,7 +240,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                 _authViewModel.photoMap["profileImageUrl"]!,
                                 width: 100,
                                 height: 100,
-                                fit: BoxFit.fitHeight,
+                                fit: BoxFit.cover,
                               ))
                           : Container(
                               decoration: BoxDecoration(
@@ -225,7 +263,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                 controller: _nameController,
                 labelText: '이름',
                 hintText: _hintText(
-                    _authViewModel.userModel.value?.name!, '이름을 넣어주세요!'),
+                    _authViewModel.userModel.value?.name ?? "", '이름을 넣어주세요!'),
                 validator: (textValue) {
                   if (textValue == null || textValue.isEmpty) {
                     return '이름을 넣어주세요!';
@@ -248,7 +286,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                             controller: _ageController,
                             decoration: InputDecoration(
                               // hintText: '나이',
-                              hintText: _hintText(
+                              hintText: _hintTextInNumber(
                                   _authViewModel.userModel.value?.age
                                           .toString() ??
                                       "",
@@ -259,46 +297,68 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                             inputFormatters: <TextInputFormatter>[
                               FilteringTextInputFormatter.digitsOnly
                             ],
+                            onTap: () async {
+                              DateTime? pickedDate = await showDatePicker(
+                                  context: context, initialDate: DateTime.now(),
+                                  firstDate: DateTime(1950), //DateTime.now() - not to allow to choose before today.
+                                  lastDate: DateTime(2023)
+                              );
+
+                              if(pickedDate != null ){
+                                  print(pickedDate);  //pickedDate output format => 2021-03-10 00:00:00.000
+                                  String formattedDate = DateFormat('yyyy년 MM월 dd일').format(pickedDate); 
+                                    //you can implement different kind of Date Format here according to your requirement
+                                  print(pickedDate.year);
+                                  print(2022-pickedDate.year);
+                                  age = 2022-pickedDate.year;
+                                  print(age);
+                                  setState(() {
+                                    _ageController.text = age.toString(); //set output date to TextField value. 
+                                  });
+                              }else{
+                                  print("Date is not selected");
+                              }
+                            },
                           ),
                         ),
                         Expanded(
                           child: TextField(
-                            controller: _heightController,
-                            decoration: InputDecoration(
-                              hintText: _hintText(
-                                  _authViewModel.userModel.value?.height
-                                          .toString() ??
-                                      "",
-                                  '키'),
-                              contentPadding: EdgeInsets.all(10),
-                            ),
-                            keyboardType: TextInputType.number,
-                            inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.digitsOnly
-                            ],
-                            onTap: () {
-                              _showDialog(
-                              CupertinoPicker(
-                                magnification: 1.22,
-                                squeeze: 1.2,
-                                useMagnifier: true,
-                                itemExtent: _kItemExtent,
-                                // This is called when selected item is changed.
-                                onSelectedItemChanged: (int selectedItem) {
-                                  setState(() {
-                                    _selectedFruit = selectedItem;
-                                  });
-                                },
-                                children:
-                                    List<Widget>.generate(_fruitNames.length, (int index) {
-                                  return Center(
-                                    child: Text(
-                                      _fruitNames[index],
-                                    ),
-                                  );
-                                }),
+                              controller: _heightController,
+                              decoration: InputDecoration(
+                                hintText: _hintTextInNumber(
+                                    _authViewModel.userModel.value?.height
+                                            .toString() ??
+                                        "",
+                                    '키'),
+                                contentPadding: EdgeInsets.all(10),
                               ),
-                            );}
+                              onTap: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return SizedBox(
+                                      height: 200,
+                                      child: CupertinoPicker(
+                                        magnification: 1.22,
+                                        squeeze: 1.2,
+                                        useMagnifier: true,
+                                        itemExtent: 25,
+                                        diameterRatio:1,
+                                        onSelectedItemChanged: (i) {
+                                          setState(() {
+                                            _heightController.text = heightItem[i];
+                                          });
+                                        },
+                                        children: [
+                                          ...heightItem.map((e) => Text(
+                                                e,
+                                              ))
+                                        ]
+                                      )
+                                    );
+                                 }
+                                );
+                              }
                           ),
                         ),
                       ],
@@ -317,6 +377,33 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                   '직업'),
                               contentPadding: EdgeInsets.all(10),
                             ),
+                            onTap: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return SizedBox(
+                                      height: 200,
+                                      child: CupertinoPicker(
+                                        magnification: 1.22,
+                                        squeeze: 1.2,
+                                        useMagnifier: true,
+                                        itemExtent: 25,
+                                        diameterRatio:1,
+                                        onSelectedItemChanged: (i) {
+                                          setState(() {
+                                            _jobController.text = jobItem[i];
+                                          });
+                                        },
+                                        children: [
+                                          ...jobItem.map((e) => Text(
+                                                e,
+                                              ))
+                                        ]
+                                      )
+                                    );
+                                 }
+                                );
+                              }
                           ),
                         ),
                         Expanded(
@@ -330,6 +417,33 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                   '체형'),
                               contentPadding: EdgeInsets.all(10),
                             ),
+                            onTap: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return SizedBox(
+                                      height: 200,
+                                      child: CupertinoPicker(
+                                        magnification: 1.22,
+                                        squeeze: 1.2,
+                                        useMagnifier: true,
+                                        itemExtent: 25,
+                                        diameterRatio:1,
+                                        onSelectedItemChanged: (i) {
+                                          setState(() {
+                                            _bodyTypeController.text = bodyTypeItem[i];
+                                          });
+                                        },
+                                        children: [
+                                          ...bodyTypeItem.map((e) => Text(
+                                                e,
+                                              ))
+                                        ]
+                                    )
+                                  );
+                                }
+                              );
+                            }
                           ),
                         ),
                       ],
@@ -349,6 +463,33 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                   '종교'),
                               contentPadding: EdgeInsets.all(10),
                             ),
+                            onTap: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return SizedBox(
+                                      height: 200,
+                                      child: CupertinoPicker(
+                                        magnification: 1.22,
+                                        squeeze: 1.2,
+                                        useMagnifier: true,
+                                        itemExtent: 25,
+                                        diameterRatio:1,
+                                        onSelectedItemChanged: (i) {
+                                          setState(() {
+                                            _religionController.text = religionItem[i];
+                                          });
+                                        },
+                                        children: [
+                                          ...religionItem.map((e) => Text(
+                                                e,
+                                              ))
+                                        ]
+                                    )
+                                  );
+                                }
+                              );
+                            }
                           ),
                         ),
                         Expanded(
@@ -360,6 +501,33 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                   'MBTI'),
                               contentPadding: EdgeInsets.all(10),
                             ),
+                            onTap: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return SizedBox(
+                                      height: 200,
+                                      child: CupertinoPicker(
+                                        magnification: 1.22,
+                                        squeeze: 1.2,
+                                        useMagnifier: true,
+                                        itemExtent: 25,
+                                        diameterRatio:1,
+                                        onSelectedItemChanged: (i) {
+                                          setState(() {
+                                            _mbtiController.text = mbtiItem[i];
+                                          });
+                                        },
+                                        children: [
+                                          ...mbtiItem.map((e) => Text(
+                                                e,
+                                              ))
+                                        ]
+                                      )
+                                    );
+                                 }
+                                );
+                              }
                           ),
                         ),
                       ],
@@ -594,7 +762,21 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
             CustomFormButton(
               innerText: '저장하기',
               onPressed: () {
-                uploadFile(context);
+                if(_authViewModel.photoMap["profileImageUrl"] != null){
+                  uploadFile(context);
+                }
+                else{
+                  showDialog(
+                              barrierColor: Colors.black26,
+                              context: context,
+                              builder: (context) {
+                                return const CustomAlertDialog(
+                                  title: "상단의 대표사진을 넣어주세요",
+                                  //description: "Custom Popup dialog Description.",
+                                );
+                              },
+                  );
+                }
               },
             ),
             SizedBox(
@@ -663,6 +845,13 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
 
   String _hintText(String? text, String hintText) {
     if (_authViewModel.userModel.value != null && text != '') {
+      return text!;
+    }
+    return hintText;
+  }
+
+  String _hintTextInNumber(String? text, String hintText) {
+    if (_authViewModel.userModel.value != null && text != '' && text != '0') {
       return text!;
     }
     return hintText;

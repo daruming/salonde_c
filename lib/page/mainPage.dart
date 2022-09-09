@@ -11,9 +11,7 @@ import 'package:salondec/page/screen/loveletterScreen.dart';
 import 'package:salondec/page/viewmodel/rating_viewmodel.dart';
 import 'package:salondec/page/widgets/main_drawer.dart';
 
-
 import 'package:salondec/page/viewmodel/auth_viewmodel.dart';
- 
 
 String title_string = "Home";
 
@@ -41,9 +39,18 @@ class _MainPageState extends State<MainPage> {
   final TextEditingController _username = TextEditingController();
   // final user = FirebaseAuth.instance.currentUser!;
 
+  void init() async {
+    if (_authViewModel.initNum == 0) {
+      await _authViewModel.init();
+    }
+    if (_ratingViewModel.initNum == 0) {
+      await _ratingViewModel.init(uid: _authViewModel.userModel.value!.uid);
+    }
+  }
+
   @override
   void initState() {
- _ratingViewModel.init(uid: _authViewModel.userModel.value!.uid);
+    init();
     super.initState();
   }
 
@@ -152,10 +159,6 @@ class _MainPageState extends State<MainPage> {
       ),
     );
   }
-
-  // Drawer _drawer(BuildContext context) {
-  //   return MainDrawer(username: _username, authViewModel: _authViewModel);
-  // }
 
   Future<void> appExitDialogForAnfroid({required Function? onClose}) async {
     return await showDialog(

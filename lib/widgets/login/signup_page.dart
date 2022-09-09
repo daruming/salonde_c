@@ -10,6 +10,7 @@ import 'package:salondec/component/custom_form_buttom.dart';
 import 'package:salondec/component/custom_input_field.dart';
 import 'package:salondec/component/page_header.dart';
 import 'package:salondec/component/page_heading.dart';
+import 'package:salondec/menu/loginScreen.dart';
 
 import 'package:salondec/page/mainPage.dart';
 import 'package:salondec/page/viewmodel/auth_viewmodel.dart';
@@ -202,12 +203,14 @@ class _SignupPageState extends State<SignupPage> {
                                   fontWeight: FontWeight.bold),
                             ),
                             GestureDetector(
-                              onTap: () => {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const LoginPage()))
+                              onTap: () {
+                                _authViewModel.userSignUpState.value = false;
+                                // setState(() {});
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) =>
+                                //             const LoginPage()))
                               },
                               child: const Text(
                                 '로그인하기',
@@ -280,9 +283,13 @@ class _SignupPageState extends State<SignupPage> {
           );
         }
         if (result) {
-          await _authViewModel.signInWithEmail(
-              email: _email.text.trim(), password: _password.text.trim());
-          Get.toNamed(MainPage.routeName);
+          _authViewModel.userSignUpState.value = false;
+
+          //   await _authViewModel.signInWithEmail(
+          //       email: _email.text.trim(), password: _password.text.trim());
+          //   // Get.toNamed(MainPage.routeName);
+          //   Get.back();
+          //   // Get.until((route) => Get.currentRoute == LoginScreen.routeName);
         }
         // try {
         //   await FirebaseAuth.instance.signOut();

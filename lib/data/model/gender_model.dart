@@ -134,19 +134,19 @@ class GenderModel extends Equatable {
   List<Object> get props {
     return [
       uid,
-      age!,
-      ratedPersonsLength!,
-      rating!,
-      imgUrl1!,
-      imgUrl2!,
-      imgUrl3!,
-      name!,
-      mbti!,
-      job!,
-      introduction!,
-      character!,
-      interest!,
-      profileImageUrl!,
+      age ?? 0,
+      ratedPersonsLength ?? 0,
+      rating ?? 0.0,
+      imgUrl1 ?? "",
+      imgUrl2 ?? "",
+      imgUrl3 ?? "",
+      name ?? "",
+      mbti ?? "",
+      job ?? "",
+      introduction ?? "",
+      character ?? "",
+      interest ?? "",
+      profileImageUrl ?? "",
     ];
   }
 }
