@@ -4,9 +4,7 @@ import 'package:salondec/data/agora_setting.dart';
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:agora_rtc_engine/rtc_local_view.dart' as RtcLocalView;
 import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
-import 'package:permission_handler/permission_handler.dart';
 import 'package:agora_uikit/agora_uikit.dart';
-import 'package:salondec/menu/loginScreen.dart';
 import 'package:salondec/page/viewmodel/auth_viewmodel.dart';
 
 const appId = APP_ID;
