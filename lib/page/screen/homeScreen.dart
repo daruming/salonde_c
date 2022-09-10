@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:salondec/core/viewState.dart';
-import 'package:salondec/data/model/person2.dart';
 import 'package:salondec/page/viewmodel/auth_viewmodel.dart';
 import 'package:salondec/page/viewmodel/rating_viewmodel.dart';
 import 'package:salondec/page/widgets/main_drawer.dart';

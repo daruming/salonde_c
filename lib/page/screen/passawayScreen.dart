@@ -1,28 +1,14 @@
 import 'package:flutter/material.dart';
-import 'today_detail2.dart';
-import 'package:salondec/data/model/person2.dart';
+import 'package:salondec/page/viewmodel/auth_viewmodel.dart';
+import 'package:get/get.dart';
+import 'today_detail.dart';
+
+
 
 class PassawayScreen extends StatelessWidget {
   PassawayScreen({Key? key}) : super(key: key);
-
-  final List<Note> _noteList = [
-    Note(
-      title: '강살롱',
-      content: '24살 | 배우 | ESFJ',
-      image: 'assets/image/image1.png',
-    ),
-    Note(
-      title: '김살롱',
-      content: '24살 | 배우 | ESFJ',
-      image: 'assets/image/image2.png',
-    ),
-    Note(
-      title: '주살롱',
-      content: '24살 | 배우 | ESFJ',
-      image: 'assets/image/image3.png',
-    )
-  ];
-
+  AuthViewModel _authViewModel = Get.find<AuthViewModel>();
+  
   List<String> images = [
     "assets/image/image1_mask.png",
     "assets/image/image4_mask.png",
@@ -34,7 +20,8 @@ class PassawayScreen extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: GridView.builder(
-          itemCount: images.length,
+          //itemCount: images.length,
+          itemCount: _authViewModel.genderModelList.length,
           padding: EdgeInsets.all(15),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
@@ -42,29 +29,92 @@ class PassawayScreen extends StatelessWidget {
               crossAxisSpacing: 12.0,
               mainAxisSpacing: 12.0),
           itemBuilder: (BuildContext context, int index) => GestureDetector(
-            onTap: () => Navigator.push(
+            onTap: () {
+              Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => todaydetail2(_noteList[index]),
-                )),
-            child: Container(
-              child: Column(
-                children: [
-                  Image.asset(images[index]),
-                  Flexible(
-                    flex: 1,
-                    fit: FlexFit.tight,
-                    child: Container(
-                      height: 60,
-                      alignment: Alignment.center,
+                  builder: (context) => Todaydetail(_authViewModel.genderModelList[index]),
+                )
+              );
+            },
+            child: Card(
+                      shadowColor: Colors.transparent,
+                      child: Stack(
+                          alignment: FractionalOffset.bottomCenter,
+                          children: <Widget>[
+                            Container(
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: NetworkImage(
+                                          // doc['userPhotoUrl'],
+                                          _authViewModel.genderModelList[index]
+                                              .profileImageUrl!,
+                                        ),
+                                        fit: BoxFit.fitHeight))),
+                            Container(
+                              color: Colors.white,
+                              alignment: Alignment.center,
+                              height: 40.0,
+                              child: Row(children: <Widget>[
+                                Expanded(
+                                    child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            10, 0, 0, 0),
+                                        // child: Text(doc['title'],
+                                        child: Text(
+                                            _authViewModel
+                                                    .genderModelList[index]
+                                                    .name ??
+                                                "",
+                                            style: const TextStyle(
+                                                fontSize: 16.0,
+                                                fontFamily: 'Gothic A1',
+                                                fontWeight: FontWeight.w600)))),
+                                Expanded(
+                                    child: Text(
+                                        _eachText(index, "age") +
+                                            ' | ' +
+                                        _eachText(index, "job") +
+                                            ' | ' +
+                                        _eachText(index, "mbti"),
+                                        style: const TextStyle(
+                                            fontSize: 10.0,
+                                            fontFamily: 'Gothic A1',
+                                            fontWeight: FontWeight.w400))),
+                              ]),
+                            ),
+                          ]),
                     ),
-                  ),
-                ],
-              ),
-            ),
+
           ),
         ),
       ),
     );
+  }
+
+  _eachText(int index, String text) {
+    var res = '';
+    switch (text) {
+      case "age":
+        res = (_authViewModel.genderModelList[index].age != null &&
+                _authViewModel.genderModelList[index].age != 0)
+            ? _authViewModel.genderModelList[index].age.toString()
+            : "";
+        break;
+      case "job":
+        res = (_authViewModel.genderModelList[index].job != null &&
+                _authViewModel.genderModelList[index].job != '')
+            ? _authViewModel.genderModelList[index].job!
+            : "";
+        break;
+      case "mbti":
+        res = (_authViewModel.genderModelList[index].mbti != null &&
+                _authViewModel.genderModelList[index].mbti != '')
+            ? _authViewModel.genderModelList[index].mbti!
+            : "";
+        break;
+      default:
+    }
+    return res;
   }
 }
