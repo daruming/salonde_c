@@ -112,14 +112,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: Text(
                                         _eachText(index, "age") +
                                             ' | ' +
-                                            _eachText(index, "job") +
+                                        _eachText(index, "job") +
                                             ' | ' +
-                                            _eachText(index, "mbti"),
-                                        // doc['age'] +
-                                        //     ' | ' +
-                                        //     doc['job'] +
-                                        //     ' | ' +
-                                        //     doc['mbti'],
+                                        _eachText(index, "mbti"),
                                         style: const TextStyle(
                                             fontSize: 10.0,
                                             fontFamily: 'Gothic A1',
