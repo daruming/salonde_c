@@ -136,7 +136,9 @@ class _TodaydetailState extends State<Todaydetail> {
                             barrierColor: Color(0xff365859).withOpacity(0.5),
                             context: context,
                             builder: (context) {
-                              return const CustomLoveLetter(
+                              return CustomLoveLetter(
+                                func: sendFavoriteMessage,
+                                genderModel: widget.genderModel,
                                 title: "당신의 마음을 담아 러브레터 보냅니다.[유료버전]",
                                 hint: "설레는 마음을 담아 메세지를 작성해보아요 :)",
                               );
