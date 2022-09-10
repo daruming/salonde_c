@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:salondec/component/custom_picker.dart';
 import 'package:salondec/page/viewmodel/auth_viewmodel.dart';
-import 'package:salondec/menu/myPageScreen.dart';
 
 class MainDrawer extends StatelessWidget {
   MainDrawer({
@@ -17,33 +15,101 @@ class MainDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      width: MediaQuery.of(context).size.width, // 75% of screen will be occupied
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          const DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.blue,
-            ),
-            child: Text("header"),
+          const SizedBox(
+            child: DrawerHeader(
+              decoration: BoxDecoration(
+                color: Color(0xff365859),
+                image: DecorationImage(image: AssetImage('assets/image/logo.png'), fit:BoxFit.fitHeight)
+              ), child: null,
+          )
           ),
           ListTile(
-            leading: const Icon(
-              Icons.home,
+            dense: true, visualDensity: VisualDensity(vertical: 3),   
+            title: new Center(
+              child: const Text('공지사항', style: TextStyle(
+                  color: Color(0xff3E3E3E),
+                  fontWeight: FontWeight.w700,
+                  fontSize: 18.0)
+                  )
             ),
-            title: const Text('나의 프로필'),
+            shape: Border(bottom: BorderSide(color: Color(0xffE5E5E5))),
             onTap: () {
+              /*
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => MyPageScreen()));
+              */
             },
           ),
           ListTile(
-            leading: const Icon(
-              Icons.home,
+            dense: true, visualDensity: VisualDensity(vertical: 3),   
+            title: new Center(
+              child: const Text('코인샵', style: TextStyle(
+                  color: Color(0xff3E3E3E),
+                  fontWeight: FontWeight.w700,
+                  fontSize: 18.0)
+                  )
             ),
-            title: const Text('피커'),
+            shape: Border(bottom: BorderSide(color: Color(0xffE5E5E5))),
             onTap: () {
+              /*
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => CustomPicker()));
+                  MaterialPageRoute(builder: (context) => MyPageScreen()));
+              */
+            },
+          ),
+          ListTile(
+            dense: true, visualDensity: VisualDensity(vertical: 3),   
+            title: new Center(
+              child: const Text('청담드살롱이란?', style: TextStyle(
+                  color: Color(0xff3E3E3E),
+                  fontWeight: FontWeight.w700,
+                  fontSize: 18.0)
+                  )
+            ),
+            shape: Border(bottom: BorderSide(color: Color(0xffE5E5E5))),
+            onTap: () {
+              /*
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => MyPageScreen()));
+              */
+            },
+          ),
+          ListTile(
+            dense: true, visualDensity: VisualDensity(vertical: 3),   
+            title: new Center(
+              child: const Text('청담드살롱 멤버쉽', style: TextStyle(
+                  color: Color(0xff3E3E3E),
+                  fontWeight: FontWeight.w700,
+                  fontSize: 18.0)
+                  )
+            ),
+            shape: Border(bottom: BorderSide(color: Color(0xffE5E5E5))),
+            onTap: () {
+              /*
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => MyPageScreen()));
+              */
+            },
+          ),
+          ListTile(
+            dense: true, visualDensity: VisualDensity(vertical: 3),   
+            title: new Center(
+              child: const Text('문의사항', style: TextStyle(
+                  color: Color(0xff3E3E3E),
+                  fontWeight: FontWeight.w700,
+                  fontSize: 18.0)
+                  )
+            ),
+            shape: Border(bottom: BorderSide(color: Color(0xffE5E5E5))),
+            onTap: () {
+              /*
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => MyPageScreen()));
+              */
             },
           ),
         ],

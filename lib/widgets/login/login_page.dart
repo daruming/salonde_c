@@ -7,12 +7,9 @@ import 'package:salondec/component/page_heading.dart';
 
 import 'package:get/get.dart';
 import 'package:salondec/core/define.dart';
-import 'package:salondec/menu/loginScreen.dart';
-import 'package:salondec/page/mainPage.dart';
 import 'package:salondec/page/viewmodel/auth_viewmodel.dart';
 
 //develop
-import 'signup_page.dart';
 import 'package:email_validator/email_validator.dart';
 import 'forget_password_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';

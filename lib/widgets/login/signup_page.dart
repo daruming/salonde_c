@@ -3,22 +3,18 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:image_picker/image_picker.dart';
 //myprofile
 import 'package:salondec/component/custom_form_buttom.dart';
 import 'package:salondec/component/custom_input_field.dart';
 import 'package:salondec/component/page_header.dart';
 import 'package:salondec/component/page_heading.dart';
-import 'package:salondec/menu/loginScreen.dart';
 
-import 'package:salondec/page/mainPage.dart';
 import 'package:salondec/page/viewmodel/auth_viewmodel.dart';
 //import 'common/custom_form_buttom.dart';
 //import 'common/custom_input_field.dart';
 //import 'common/page_header.dart';
 //develop
-import 'login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class SignupPage extends StatefulWidget {
