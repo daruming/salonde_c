@@ -63,10 +63,10 @@ class _ImageUploadsState extends State<ImageUploads> {
       final firebaseStorageRef = FirebaseStorage.instance
           .ref()
           .child('file') //'post'라는 folder를 만들고
-          .child('${DateTime.now().millisecondsSinceEpoch}.png');
+          .child('${DateTime.now().millisecondsSinceEpoch}.jpg');
 
       final UploadTask task = firebaseStorageRef.putFile(
-          _photo!, SettableMetadata(contentType: 'image/png'));
+          _photo!, SettableMetadata(contentType: 'image/jpg'));
       // 완료까지 기다림
       print("완료를 기다리는 중");
       await task.whenComplete(() => null);
