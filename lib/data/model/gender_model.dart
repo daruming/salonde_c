@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 
 import 'package:salondec/data/model/user_model.dart';
 
+// ignore: must_be_immutable
 class GenderModel extends Equatable {
   late String uid;
   late int? age;

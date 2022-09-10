@@ -45,6 +45,9 @@ class AuthViewModel extends GetxController {
 
   Rxn<UserModel> userModel = Rxn();
 
+  Rx<UploadState> _uploadState = UploadState.initial.obs;
+  UploadState get uploadState => _uploadState.value;
+
   ErrorState _errorState = ErrorState.none;
   ErrorState get errorState => _errorState;
   // UserModel? get userModel => _userModel.value;
@@ -194,38 +197,34 @@ class AuthViewModel extends GetxController {
     }
   }
 
-  Future<void> uploadUpdateImages(
-      // {required List<String> urlList, required File photo}) async {
-      {required Map<String, File> photoMap}) async {
+  Future<void> upLoadFiles(UserModel userModel) async {
+    if (photoMap.isNotEmpty) {
+      _uploadState.value = UploadState.loading;
+      await uploadUpdateImages(photoMap: photoMap);
+      await getDownloadURLs();
+      await updateUserInfo(userModelTemp: userModel);
+      await getUserInfo();
+      _uploadState.value = UploadState.loaded;
+    } else {
+      _uploadState.value = UploadState.loading;
+      await updateUserInfo(userModelTemp: userModel);
+      await getUserInfo();
+      _uploadState.value = UploadState.loaded;
+    }
+  }
+
+  Future<void> uploadUpdateImages({required Map<String, File> photoMap}) async {
     try {
       if (photoMap.isNotEmpty) {
-        // var piterator = photoMap.keys.iterator;
-        // for (var i = 0; i < photoMap.length; piterator., i++) {
-        //   print("piterator.current ${piterator.current.toString()}");
-        // }
-        // List<String> test = [];
-        // test.add(photoMap.keys.iterator.current);
-        // print("object $test");
-
         for (var mapKey in photoMap.keys) {
           final firebaseStorageRef = _firebaseStorage
               .ref()
               .child('users')
               .child('${DateTime.now().millisecondsSinceEpoch}.png');
           referenceMap[mapKey] = firebaseStorageRef;
-          // var test  = await firebaseStorageRef.putFile(
           await firebaseStorageRef.putFile(
               photoMap[mapKey]!, SettableMetadata(contentType: 'image/png'));
-          // photoFile, SettableMetadata(contentType: 'image/png'));
         }
-        // photoMap.forEach((key, photoFile) async {
-        //     .whenComplete(() async {
-        //   downloadUrlMap[key] = await firebaseStorageRef.getDownloadURL();
-        // });
-        // test.ref.fullPath
-        // downloadUrlMap[key] = await firebaseStorageRef.getDownloadURL();
-        // });
-        // updateImagesInfo(downloadUrlMap: downloadUrlMap);
       }
     } on FirebaseException catch (e) {
       if (e.code == "network-request-failed") {
@@ -241,12 +240,6 @@ class AuthViewModel extends GetxController {
     for (var mapKey in referenceMap.keys) {
       downloadUrlMap[mapKey] = await referenceMap[mapKey]!.getDownloadURL();
     }
-    // referenceMap.forEach((key, e) async {
-    //   downloadUrlMap[key] = await e.getDownloadURL();
-    // });
-    // if (referenceMap.length != referenceMap.length) {
-    //   await getDownloadURLs();
-    // }
   }
 
   // Future<void> updateImagesInfo(
@@ -352,7 +345,6 @@ class AuthViewModel extends GetxController {
   Future<void> getUserInfo(
       // required String uid,
       ) async {
-    // currentUser();
     try {
       DocumentSnapshot documentSnapshot = await _firebaseFirestore
           .collection(FireStoreCollection.userCollection)
