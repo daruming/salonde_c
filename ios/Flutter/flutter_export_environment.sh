@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
 export "FLUTTER_ROOT=/Users/krust/development/flutter"
-export "FLUTTER_APPLICATION_PATH=/Users/krust/Desktop/salonde_c-develop"
+export "FLUTTER_APPLICATION_PATH=/Users/krust/Downloads/salonde_c-develop 3"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_TARGET=lib/main.dart"
 export "FLUTTER_BUILD_DIR=build"
