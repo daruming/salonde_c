@@ -249,8 +249,7 @@ class _RatingScreenState extends State<RatingScreen> {
                       side: BorderSide(color:  Colors.grey,),
                     ),
                     onTap: () {
-                      Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => MyPageScreen()));
+                      Get.back();
                     }
                   ),
                   SizedBox(height: 5,),
