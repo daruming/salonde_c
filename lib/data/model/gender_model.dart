@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 import 'package:salondec/data/model/user_model.dart';
+
 // ignore: must_be_immutable
 class GenderModel extends Equatable {
   late String uid;
@@ -49,7 +50,7 @@ class GenderModel extends Equatable {
       return {
         'uid': uid,
         'age': (age == null || age == 0) ? userModel.age : age,
-        'height' : (height == null || height == 0) ? userModel.height : height,
+        'height': (height == null || height == 0) ? userModel.height : height,
         'ratedPersonsLength':
             (ratedPersonsLength == null || ratedPersonsLength == 0)
                 // ? userModel.ratedPersonsLength
@@ -63,9 +64,13 @@ class GenderModel extends Equatable {
         'imgUrl3':
             (imgUrl3 == null || imgUrl3 == '') ? userModel.imgUrl3 : imgUrl3,
         'name': (name == null || name == '') ? userModel.name : name,
-        'religion': (religion == null || religion == '') ? userModel.religion : religion,
+        'religion': (religion == null || religion == '')
+            ? userModel.religion
+            : religion,
         'mbti': (mbti == null || mbti == '') ? userModel.mbti : mbti,
-        'bodytype': (bodytype == null || bodytype == '') ? userModel.bodytype : bodytype,
+        'bodytype': (bodytype == null || bodytype == '')
+            ? userModel.bodytype
+            : bodytype,
         'job': (job == null || job == '') ? userModel.job : job,
         'introduction': (introduction == null || introduction == '')
             ? userModel.introduction
@@ -84,7 +89,7 @@ class GenderModel extends Equatable {
     return {
       'uid': uid,
       'age': age ?? 0,
-      'height' : height ?? 0,
+      'height': height ?? 0,
       'ratedPersonsLength': ratedPersonsLength ?? 0,
       'rating': rating ?? 0.0,
       'imgUrl1': imgUrl1 ?? "",
@@ -128,8 +133,11 @@ class GenderModel extends Equatable {
       age: json['age'] ?? 0,
       height: json['height'] ?? 0,
       ratedPersonsLength: json['ratedPersonsLength'] ?? 0,
-      rating: resultRating(json['rating'] is int ? temp : json['rating'],
-          json['ratedPersonsLength']),
+      // rating: resultRating(json['rating'] is int ? temp : json['rating'],
+      //     json['ratedPersonsLength']),
+      rating: resultRating(
+          json['rating'] is int ? temp : (json['rating'] ?? 0.0),
+          (json['ratedPersonsLength'] ?? 0)),
       imgUrl1: json['imgUrl1'] ?? "",
       imgUrl2: json['imgUrl2'] ?? "",
       imgUrl3: json['imgUrl3'] ?? "",

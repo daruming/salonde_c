@@ -22,10 +22,15 @@ class RatedModel extends Equatable {
 
   factory RatedModel.fromFirebase(DocumentSnapshot documentSnapshot) {
     Map<String, dynamic> json = documentSnapshot.data() as Map<String, dynamic>;
+    double temp = 0;
 
+    if (json['rating'] is int) {
+      int rating = json['rating'];
+      temp = rating.toDouble();
+    }
     return RatedModel(
       uid: json['uid'],
-      rating: json['rating'],
+      rating: json['rating'] is int ? temp : json['rating'],
       // ratingYn: json['ratingYn'],
     );
   }

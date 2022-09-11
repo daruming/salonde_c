@@ -36,12 +36,23 @@ class RatingViewModel extends GetxController {
   final Rxn<ViewState> _detailViewState = Rxn(Initial());
   ViewState get detailViewState => _detailViewState.value!;
 
+  final Rxn<ViewState> _profileViewState = Rxn(Initial());
+  ViewState get profileViewState => _profileViewState.value!;
+
   final Rxn<ViewState> _luvLetterViewState = Rxn(Initial());
   ViewState get luvLetterViewState => _luvLetterViewState.value!;
   // var doSendFavortieMessage = false;  //! 호감보내기 버튼 -> 먼저 목록을 가져와서 있으면 이미 했다고 알림띄우기
 
   RxInt _initNum = 0.obs;
   int get initNum => _initNum.value;
+
+  Map<String, double> ratingList = {
+    '1.0': 0.0,
+    '2.0': 0.0,
+    '3.0': 0.0,
+    '4.0': 0.0,
+    '5.0': 0.0,
+  };
 
   Future<void> rating({
     required String uid,
@@ -421,6 +432,7 @@ class RatingViewModel extends GetxController {
     List<RatedModel> tempList = [];
     ratedPersons.clear();
     try {
+      _setState(_profileViewState, Loading());
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
           await _firebaseFirestore
               .collection(FireStoreCollection.userCollection)
@@ -444,6 +456,8 @@ class RatingViewModel extends GetxController {
       // } else {
       //   ratedPersons.addAll(tempList);
       // }
+      classifyRatingPoints();
+      _setState(_profileViewState, Loaded());
     } on FirebaseException catch (e) {
       if (e.code == "network-request-failed") {
         _errorState = ErrorState.network;
@@ -452,6 +466,40 @@ class RatingViewModel extends GetxController {
       logger.d("error code : ${e.toString()}, ${e.stackTrace}");
     } catch (e) {
       _catchError(e);
+    }
+  }
+
+  void classifyRatingPoints() {
+    ratingList['1.0'] = 0.0;
+    ratingList['2.0'] = 0.0;
+    ratingList['3.0'] = 0.0;
+    ratingList['4.0'] = 0.0;
+    ratingList['5.0'] = 0.0;
+    for (var model in ratedPersons) {
+      var num = model.rating;
+      switch (num.toInt()) {
+        case 1:
+          double num = ratingList['1.0']!;
+          ratingList['1.0'] = num + 1;
+          break;
+        case 2:
+          double num = ratingList['2.0']!;
+          ratingList['2.0'] = num + 1;
+          break;
+        case 3:
+          double num = ratingList['3.0']!;
+          ratingList['3.0'] = num + 1;
+          break;
+        case 4:
+          double num = ratingList['4.0']!;
+          ratingList['4.0'] = num + 1;
+          break;
+        case 5:
+          double num = ratingList['5.0']!;
+          ratingList['5.0'] = num + 1;
+          break;
+        default:
+      }
     }
   }
 
