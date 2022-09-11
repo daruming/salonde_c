@@ -4,6 +4,10 @@ import 'package:salondec/data/model/chat.dart';
 import 'package:salondec/component/custom_form_buttom.dart';
 import 'package:salondec/page/screen/textChatRoomMaker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
+import 'package:timeago/timeago.dart' as timeago;
+
+
 
 class textChatLobbyScreen extends StatefulWidget {
   final String username;
@@ -17,6 +21,9 @@ class _textChatLobbyScreenState extends State<textChatLobbyScreen> with SingleTi
   final _channelFieldController = TextEditingController();
   late TabController _tabController;
 
+  DateTime _now = DateTime.now();
+  final DateTime time1 = DateTime.parse("2022-04-20 20:18:04Z");
+  final DateTime time2 = DateTime.now();
 
   final List<Chat> _chatList = [
     Chat(
@@ -130,7 +137,7 @@ class _textChatLobbyScreenState extends State<textChatLobbyScreen> with SingleTi
                                 child: ListTile(
                                     title: Text(doc['title'],style: TextStyle(color: Color(0xff365859),fontWeight: FontWeight.w800)),
                                     subtitle: Text("댓글이 없습니다", style: TextStyle(color: Color(0xffC4C4C4))),
-                                    trailing:Text("_chatList[index].times")
+                                    trailing:Text(timeago.format(time2)),
                                 )
                             )
                         );

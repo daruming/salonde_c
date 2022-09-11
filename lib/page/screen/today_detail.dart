@@ -159,20 +159,42 @@ class _TodaydetailState extends State<Todaydetail> {
 
           SliverGrid(
             gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 200.0,
+              maxCrossAxisExtent: 300.0,
               childAspectRatio: 4.0,
             ),
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return Container(
+            delegate: SliverChildListDelegate([
+                Container(
                   alignment: Alignment.center,
                   color: Colors.white,
-                  child: Text('질문 $index'),
-                );
-              },
-              childCount: 6,
+                  child: Text(widget.genderModel.age.toString()),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  color: Colors.white,
+                  child: Text(widget.genderModel.height.toString()),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  color: Colors.white,
+                  child: Text(widget.genderModel.job ?? ""),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  color: Colors.white,
+                  child: Text(widget.genderModel.bodytype ?? ""),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  color: Colors.white,
+                  child: Text(widget.genderModel.religion ?? ""),
+                ),
+                Container(
+                  alignment: Alignment.center,
+                  color: Colors.white,
+                  child: Text(widget.genderModel.mbti ?? ""),
+                ),
+              ]),
             ),
-          ),
 
           SliverList(
             delegate: SliverChildListDelegate([

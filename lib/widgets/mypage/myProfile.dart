@@ -861,9 +861,9 @@ class _MyProfileScreenState extends State<MyProfileScreen>
               return CustomFormButton(
                 innerText: '저장하기',
                 onPressed: () {
-                  if (_authViewModel.userModel.value != null ||
-                      _authViewModel.userModel.value?.profileImageUrl != null ||
-                      _authViewModel.userModel.value?.profileImageUrl != '' ||
+                  if (_authViewModel.userModel.value != null &&
+                      _authViewModel.userModel.value?.profileImageUrl != null &&
+                      _authViewModel.userModel.value?.profileImageUrl != '' &&
                       _authViewModel.photoMap["profileImageUrl"] == null) {
                     uploadFile(context);
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -887,14 +887,6 @@ class _MyProfileScreenState extends State<MyProfileScreen>
             SizedBox(
               height: 32,
             ),
-            ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  minimumSize: Size.fromHeight(50),
-                ),
-                child: Text('로그아웃'),
-                onPressed: () {
-                  _handleLogoutUser();
-                }),
           ]));
         }));
   }
