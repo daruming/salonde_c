@@ -31,72 +31,81 @@ class _MatchingScreenState extends State<MatchingScreen> {
         if (viewState is Loading) {
           return const ProgressWidget();
         }
-        return GridView.builder(
-            //itemCount: _matchedList.length,
-            itemCount: _ratingViewModel.waitingFavoritePersons.length,
-            padding: const EdgeInsets.all(15),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 1 / 1.73,
-                crossAxisSpacing: 12.0,
-                mainAxisSpacing: 12.0),
-            itemBuilder: (BuildContext context, int index) {
-              var model = _findGenderModelwithWaitingFavoritePersons(index);
+        return (_ratingViewModel.waitingFavoritePersons.length - 1 == 0)
+            ? GridView.builder(
+                //itemCount: _matchedList.length,
+                itemCount: _ratingViewModel.waitingFavoritePersons.length,
+                padding: const EdgeInsets.all(15),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 1 / 1.73,
+                    crossAxisSpacing: 12.0,
+                    mainAxisSpacing: 12.0),
+                itemBuilder: (BuildContext context, int index) {
+                  var model = _findGenderModelwithWaitingFavoritePersons(index);
 
-              return GestureDetector(
-                onTap: () {
-                  _ratingViewModel.isRatedPersons(targetUid: model.uid);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            Todaydetail(false, genderModel: model),
-                      ));
-                },
-                child: Card(
-                  shadowColor: Colors.transparent,
-                  child: Stack(
-                      alignment: FractionalOffset.bottomCenter,
-                      children: <Widget>[
-                        Container(
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: NetworkImage(
-                                      model.profileImageUrl!,
-                                    ),
-                                    fit: BoxFit.fitHeight))),
-                        Container(
-                          color: Colors.white,
-                          alignment: Alignment.center,
-                          height: 40.0,
-                          child: Row(children: <Widget>[
-                            Expanded(
-                                child: Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                    // child: Text(doc['title'],
-                                    child: Text(model.name ?? "",
+                  return GestureDetector(
+                    onTap: () {
+                      _ratingViewModel.isRatedPersons(targetUid: model.uid);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                Todaydetail(false, genderModel: model),
+                          ));
+                    },
+                    child: Card(
+                      shadowColor: Colors.transparent,
+                      child: Stack(
+                          alignment: FractionalOffset.bottomCenter,
+                          children: <Widget>[
+                            Container(
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: NetworkImage(
+                                          model.profileImageUrl!,
+                                        ),
+                                        fit: BoxFit.fitHeight))),
+                            Container(
+                              color: Colors.white,
+                              alignment: Alignment.center,
+                              height: 40.0,
+                              child: Row(children: <Widget>[
+                                Expanded(
+                                    child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            10, 0, 0, 0),
+                                        // child: Text(doc['title'],
+                                        child: Text(model.name ?? "",
+                                            style: const TextStyle(
+                                                fontSize: 16.0,
+                                                fontFamily: 'Gothic A1',
+                                                fontWeight: FontWeight.w600)))),
+                                Expanded(
+                                    child: Text(
+                                        _eachText(model, "age") +
+                                            ' | ' +
+                                            _eachText(model, "job") +
+                                            ' | ' +
+                                            _eachText(model, "mbti"),
                                         style: const TextStyle(
-                                            fontSize: 16.0,
+                                            fontSize: 10.0,
                                             fontFamily: 'Gothic A1',
-                                            fontWeight: FontWeight.w600)))),
-                            Expanded(
-                                child: Text(
-                                    _eachText(model, "age") +
-                                        ' | ' +
-                                        _eachText(model, "job") +
-                                        ' | ' +
-                                        _eachText(model, "mbti"),
-                                    style: const TextStyle(
-                                        fontSize: 10.0,
-                                        fontFamily: 'Gothic A1',
-                                        fontWeight: FontWeight.w400))),
+                                            fontWeight: FontWeight.w400))),
+                              ]),
+                            ),
                           ]),
-                        ),
-                      ]),
-                ),
-              );
-            });
+                    ),
+                  );
+                })
+            : Center(
+                child: Text(
+                "진행중인 이성이 없습니다",
+                style: const TextStyle(
+                    fontFamily: 'Abhaya Libre',
+                    color: Colors.grey,
+                    fontSize: 20.0),
+              ));
       }),
     );
   }

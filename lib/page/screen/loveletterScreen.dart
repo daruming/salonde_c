@@ -148,7 +148,14 @@ class _LoveletternewScreenState extends State<LoveletternewScreen> {
                               )
                             : Container();
                       })
-                  : Center(child: Text("도착한 러브레터가 없습니다"));
+                  : Center(
+                      child: Text(
+                      "도착한 러브레터가 없습니다",
+                      style: const TextStyle(
+                          fontFamily: 'Abhaya Libre',
+                          color: Colors.grey,
+                          fontSize: 20.0),
+                    ));
             }))));
   }
 
