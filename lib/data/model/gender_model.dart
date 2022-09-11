@@ -4,21 +4,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 
 import 'package:salondec/data/model/user_model.dart';
-// ignore: must_be_immutable
+
 class GenderModel extends Equatable {
   late String uid;
   late int? age;
-  late int? height;
   late int? ratedPersonsLength;
   late double? rating;
   late String? imgUrl1;
   late String? imgUrl2;
   late String? imgUrl3;
   late String? name;
-  late String? job;
-  late String? religion;
   late String? mbti;
-  late String? bodytype;
+  late String? job;
   late String? introduction;
   late String? character;
   late String? interest;
@@ -27,17 +24,14 @@ class GenderModel extends Equatable {
   GenderModel({
     required this.uid,
     this.age,
-    this.height,
     this.ratedPersonsLength,
     this.rating,
     this.imgUrl1,
     this.imgUrl2,
     this.imgUrl3,
     this.name,
-    this.job,
-    this.religion,
     this.mbti,
-    this.bodytype,
+    this.job,
     this.introduction,
     this.character,
     this.interest,
@@ -49,7 +43,6 @@ class GenderModel extends Equatable {
       return {
         'uid': uid,
         'age': (age == null || age == 0) ? userModel.age : age,
-        'height' : (height == null || height == 0) ? userModel.height : height,
         'ratedPersonsLength':
             (ratedPersonsLength == null || ratedPersonsLength == 0)
                 // ? userModel.ratedPersonsLength
@@ -63,9 +56,7 @@ class GenderModel extends Equatable {
         'imgUrl3':
             (imgUrl3 == null || imgUrl3 == '') ? userModel.imgUrl3 : imgUrl3,
         'name': (name == null || name == '') ? userModel.name : name,
-        'religion': (religion == null || religion == '') ? userModel.religion : religion,
         'mbti': (mbti == null || mbti == '') ? userModel.mbti : mbti,
-        'bodytype': (bodytype == null || bodytype == '') ? userModel.bodytype : bodytype,
         'job': (job == null || job == '') ? userModel.job : job,
         'introduction': (introduction == null || introduction == '')
             ? userModel.introduction
@@ -84,17 +75,14 @@ class GenderModel extends Equatable {
     return {
       'uid': uid,
       'age': age ?? 0,
-      'height' : height ?? 0,
       'ratedPersonsLength': ratedPersonsLength ?? 0,
       'rating': rating ?? 0.0,
       'imgUrl1': imgUrl1 ?? "",
       'imgUrl2': imgUrl2 ?? "",
       'imgUrl3': imgUrl3 ?? "",
       'name': name ?? "",
-      'job': job ?? "",
-      'religion': religion ?? "",
       'mbti': mbti ?? "",
-      'bodytype': bodytype ?? "",
+      'job': job ?? "",
       'introduction': introduction ?? "",
       'character': character ?? "",
       'interest': interest ?? "",
@@ -122,11 +110,9 @@ class GenderModel extends Equatable {
       int rating = json['rating'];
       temp = rating.toDouble();
     }
-
     GenderModel genderModel = GenderModel(
       uid: documentSnapshot.id,
       age: json['age'] ?? 0,
-      height: json['height'] ?? 0,
       ratedPersonsLength: json['ratedPersonsLength'] ?? 0,
       rating: resultRating(json['rating'] is int ? temp : json['rating'],
           json['ratedPersonsLength']),
@@ -134,10 +120,8 @@ class GenderModel extends Equatable {
       imgUrl2: json['imgUrl2'] ?? "",
       imgUrl3: json['imgUrl3'] ?? "",
       name: json['name'] ?? "",
-      job: json['job'] ?? "",
-      religion: json['religion'] ?? "",
       mbti: json['mbti'] ?? "",
-      bodytype: json['bodytype'] ?? "",
+      job: json['job'] ?? "",
       introduction: json['introduction'] ?? "",
       character: json['character'] ?? "",
       interest: json['interest'] ?? "",
@@ -151,17 +135,14 @@ class GenderModel extends Equatable {
     return [
       uid,
       age ?? 0,
-      height ?? 0,
       ratedPersonsLength ?? 0,
       rating ?? 0.0,
       imgUrl1 ?? "",
       imgUrl2 ?? "",
       imgUrl3 ?? "",
       name ?? "",
-      job ?? "",
-      religion ?? "",
       mbti ?? "",
-      bodytype ?? "",
+      job ?? "",
       introduction ?? "",
       character ?? "",
       interest ?? "",

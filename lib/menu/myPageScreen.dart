@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'myProfile.dart';
 import 'package:salondec/page/viewmodel/auth_viewmodel.dart';
 import 'package:get/get.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
-import 'package:salondec/data/model/user_model.dart';
 
 const double _kItemExtent = 32.0;
 
@@ -24,7 +21,6 @@ class _MyPageScreenState extends State<MyPageScreen> {
     super.initState();
   }
   
-
   
   @override
   Widget build(BuildContext context) {
@@ -32,8 +28,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
     final mediaQuery = MediaQuery.of(context);
     double height = mediaQuery.size.height*0.7;
   
-    return Scaffold(
-       resizeToAvoidBottomInset: false,
+    return Scaffold(  
         body: CustomScrollView(
           slivers: <Widget>[
             // Add the app bar to the CustomScrollView.
@@ -57,16 +52,17 @@ class _MyPageScreenState extends State<MyPageScreen> {
                 children: <Widget>[
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
+                    children: const <Widget>[
                       Text(
-                        _authViewModel.userModel.value?.rating.toString() ?? "", 
+                        "4.87", 
                         style: TextStyle(
                           color: Color(0xff365859),
                           fontSize: 35,
                           fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Text(_authViewModel.userModel.value?.name ?? "",
+                        Text(
+                          '남살롱, 30세', 
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 14,
@@ -135,7 +131,13 @@ class _MyPageScreenState extends State<MyPageScreen> {
                                 color: Colors.grey[800],
                               ),
                             ),
-                ),const DecoratedBox(
+                ),
+                
+                /*Image.asset(
+                  "assets/image/image8.png",
+                  fit: BoxFit.cover,
+                  ),*/
+                  const DecoratedBox(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment(0.0, 0.5),
@@ -180,16 +182,6 @@ class _MyPageScreenState extends State<MyPageScreen> {
                     onTap: () {
                     }
                     ),
-                    ElevatedButton(
-                      
-                      style: ElevatedButton.styleFrom(
-                        primary: Color(0xff365859),
-                        minimumSize: Size.fromHeight(50),
-                      ),
-                      child: Text('로그아웃'),
-                      onPressed: () {
-                        _handleLogoutUser();
-                      }),
                 ]
               )
             ),
@@ -197,25 +189,6 @@ class _MyPageScreenState extends State<MyPageScreen> {
         ),
     );
   }
-  Future _handleLogoutUser() async {
-    try {
-      // await FirebaseAuth.instance.signOut();
-      _authViewModel.signOut();
-      if (_authViewModel.user == null) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('로그아웃 되었습니다.')),
-          );
-        }
-      }
-      Navigator.of(context).popUntil((route) => route.isFirst);
-    } on FirebaseAuthException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
-      );
-    }
-  }
-
 }
   
   

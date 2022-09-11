@@ -100,16 +100,14 @@ class _TodaydetailState extends State<Todaydetail> {
                               barrierColor: Color(0xff365859).withOpacity(0.5),
                               context: context,
                               builder: (context) {
-                                return CustomLoveLetter(
-                                  func: sendFavoriteMessage,
-                                  genderModel: widget.genderModel,
+                                return const CustomLoveLetter(
                                   title:
                                       "호감을 보내고 상대방이 수락하면 바로 연락처를 알 수 있습니다.[부분무료]",
                                   hint: "설레는 마음을 담아 메세지를 작성해보아요 :)",
                                 );
                               },
                             );
-                          } else {
+                          } else if(_ratingViewModel.targetDetail.value == null) {
                             showDialog(
                               barrierColor: Colors.black26,
                               context: context,
@@ -133,17 +131,16 @@ class _TodaydetailState extends State<Todaydetail> {
                       RaisedButton(
                         onPressed: () {
                           showDialog(
-                            barrierColor: Color(0xff365859).withOpacity(0.5),
-                            context: context,
-                            builder: (context) {
-                              return CustomLoveLetter(
-                                func: sendFavoriteMessage,
-                                genderModel: widget.genderModel,
-                                title: "당신의 마음을 담아 러브레터 보냅니다.[유료버전]",
-                                hint: "설레는 마음을 담아 메세지를 작성해보아요 :)",
-                              );
-                            },
-                          );
+                              barrierColor: Color(0xff365859).withOpacity(0.5),
+                              context: context,
+                              builder: (context) {
+                                return const CustomLoveLetter(
+                                  title:
+                                      "당신의 마음을 담아 러브레터 보냅니다.[유료버전]",
+                                  hint: "설레는 마음을 담아 메세지를 작성해보아요 :)",
+                                );
+                              },
+                            );
                         },
                         child: Text("러브레터 보내기"),
                         color: Color(0xFF365859),
@@ -159,42 +156,20 @@ class _TodaydetailState extends State<Todaydetail> {
 
           SliverGrid(
             gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 300.0,
+              maxCrossAxisExtent: 200.0,
               childAspectRatio: 4.0,
             ),
-            delegate: SliverChildListDelegate([
-                Container(
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                return Container(
                   alignment: Alignment.center,
                   color: Colors.white,
-                  child: Text(widget.genderModel.age.toString()),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  color: Colors.white,
-                  child: Text(widget.genderModel.height.toString()),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  color: Colors.white,
-                  child: Text(widget.genderModel.job ?? ""),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  color: Colors.white,
-                  child: Text(widget.genderModel.bodytype ?? ""),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  color: Colors.white,
-                  child: Text(widget.genderModel.religion ?? ""),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  color: Colors.white,
-                  child: Text(widget.genderModel.mbti ?? ""),
-                ),
-              ]),
+                  child: Text('질문 $index'),
+                );
+              },
+              childCount: 6,
             ),
+          ),
 
           SliverList(
             delegate: SliverChildListDelegate([
@@ -299,9 +274,7 @@ class _TodaydetailState extends State<Todaydetail> {
                             barrierColor: Color(0xff365859).withOpacity(0.5),
                             context: context,
                             builder: (context) {
-                              return CustomLoveLetter(
-                                func: sendFavoriteMessage,
-                                genderModel: widget.genderModel,
+                              return const CustomLoveLetter(
                                 title:
                                     "호감을 보내고(20코인) 상대방이 수락하면 바로 연락처를 알 수 있습니다.",
                                 hint: "설레는 마음을 담아 메세지를 작성해보아요 :)",
@@ -398,36 +371,5 @@ class _TodaydetailState extends State<Todaydetail> {
               );
       }),
     );
-  }
-
-  void sendFavoriteMessage(BuildContext context, String message) async {
-    var checkAleadySend = await _ratingViewModel.checkAleadySendFavoirteMessage(
-      uid: _authViewModel.userModel.value!.uid,
-      targetUid: widget.genderModel.uid,
-    );
-    if (!checkAleadySend) {
-      await _ratingViewModel.sendFavoirteMessage(
-          userModel: _authViewModel.userModel.value!,
-          genderModel: widget.genderModel,
-          rating: _ratingViewModel.targetDetail.value!.rating,
-          message: message);
-      Get.back();
-    } else {
-      showDialog(
-        barrierColor: Colors.black26,
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text("이미 호감을 보내셨습니다."),
-            content: InkWell(
-                onTap: () {
-                  Get.back();
-                  Get.back();
-                },
-                child: Text("확인")),
-          );
-        },
-      );
-    }
   }
 }

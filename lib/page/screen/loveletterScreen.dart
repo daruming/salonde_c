@@ -1,10 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:salondec/component/custom_alert_dialog.dart';
-import 'package:salondec/core/viewState.dart';
-import 'package:salondec/page/viewmodel/auth_viewmodel.dart';
-import 'package:salondec/page/viewmodel/rating_viewmodel.dart';
-import 'package:salondec/page/widgets/progress_widget.dart';
 
 class LoveletternewScreen extends StatefulWidget {
   int pageIndex = 0;
@@ -13,15 +7,6 @@ class LoveletternewScreen extends StatefulWidget {
 }
 
 class _LoveletternewScreenState extends State<LoveletternewScreen> {
-  final AuthViewModel _authViewModel = Get.find<AuthViewModel>();
-  final RatingViewModel _ratingViewModel = Get.find<RatingViewModel>();
-
-  @override
-  void initState() {
-    _ratingViewModel.getFavoirtePersons(uid: _authViewModel.user!.uid);
-    super.initState();
-  }
-
   final loveletters = [
     "실은 피드백은 보실 것 같아서 이쪽으로 보내요. 프로필을 봤는데 너무 인상적이네요 :) 취미생활이 같아서 호감이 갔어요. 와인과 맛집을 좋아하는게 좋아요.",
     "진짜 별로예요. 소개글도 그렇고 너무 성의가없어요. 잘생긴걸 아는 사람? 그런느낌?ㅁ",
@@ -56,100 +41,27 @@ class _LoveletternewScreenState extends State<LoveletternewScreen> {
         debugShowCheckedModeBanner: false,
         home: DefaultTabController(
             length: 6,
-            child: Scaffold(body: Obx(() {
-              var viewState = _ratingViewModel.luvLetterViewState;
-              if (viewState is Loading) {
-                return ProgressWidget();
-              }
-              return ListView.builder(
-                  itemCount: _ratingViewModel.myGetFavoritePersons.length,
-                  itemBuilder: (context, index) {
-                    return _ratingViewModel
-                                .myGetFavoritePersons[index].matchingYn ==
-                            false
-                        ? InkWell(
-                            onTap: () {
-                              showDialog(
-                                barrierColor: Colors.black26,
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    title: const Text("수락 하시겠습니까?"),
-                                    content: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: <Widget>[
-                                        InkWell(
-                                            onTap: () {
-                                              acceptFavoirteMessage(index);
-                                            },
-                                            child: Text("확인")),
-                                        InkWell(
-                                            onTap: () => Get.back(),
-                                            child: Text("취소")),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              );
-                            },
-                            child: Card(
-                                margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                                elevation: 0.0,
-                                child: ListTile(
-                                  leading:
-                                      // Container(child: Image.asset(images[index])),
-                                      (_ratingViewModel
-                                                      .myGetFavoritePersons[
-                                                          index]
-                                                      .profileImageUrl !=
-                                                  null &&
-                                              _ratingViewModel
-                                                      .myGetFavoritePersons[
-                                                          index]
-                                                      .profileImageUrl !=
-                                                  "")
-                                          ? Container(
-                                              child: Image.network(
-                                                  _ratingViewModel
-                                                      .myGetFavoritePersons[
-                                                          index]
-                                                      .profileImageUrl!))
-                                          : Container(),
-                                  title: Padding(
-                                      padding:
-                                          EdgeInsets.fromLTRB(0, 15, 0, 10),
-                                      child: Text(
-                                          ("${_ratingViewModel.myGetFavoritePersons[index].name}님에게" +
-                                              _ratingViewModel
-                                                  .myGetFavoritePersons[index]
-                                                  .rating
-                                                  .toString() +
-                                              "점을 받았어요!"))),
-                                  subtitle: Padding(
-                                      padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
-                                      child: Text(
-                                          _ratingViewModel
-                                                  .myGetFavoritePersons[index]
-                                                  .message ??
-                                              "",
-                                          style: TextStyle(
-                                              color: Color(0xffC4C4C4)))),
-                                  trailing: Icon(Icons.more_vert),
-                                )),
-                          )
-                        : Container();
-                  });
-            }))));
-  }
-
-  void acceptFavoirteMessage(int index) async {
-    await _ratingViewModel.acceptFavoirteMessage(
-        userModel: _authViewModel.userModel.value!,
-        waitFavoriteModels: _ratingViewModel.waitingFavoritePersons,
-        getFavoriteModel: _ratingViewModel.myGetFavoritePersons[index]);
-    await _ratingViewModel.getFavoirtePersons(
-        uid: _authViewModel.userModel.value!.uid);
-    Get.back();
+            child: Scaffold(
+                body: ListView.builder(
+                    itemCount: loveletters.length,
+                    itemBuilder: (context, index) {
+                      return Card(
+                          margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                          elevation: 0.0,
+                          child: ListTile(
+                            leading:
+                                Container(child: Image.asset(images[index])),
+                            title: Padding(
+                                padding: EdgeInsets.fromLTRB(0, 15, 0, 10),
+                                child: Text(
+                                    ("강살롱님에게" + points[index] + "점을 받았어요!"))),
+                            subtitle: Padding(
+                                padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
+                                child: Text(loveletters[index],
+                                    style:
+                                        TextStyle(color: Color(0xffC4C4C4)))),
+                            trailing: Icon(Icons.more_vert),
+                          ));
+                    }))));
   }
 }

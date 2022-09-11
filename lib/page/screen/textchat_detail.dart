@@ -19,12 +19,12 @@ class _TextchatDetailState extends State<TextchatDetail> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor:Color(0xff365859),
+        // Here we take the value from the MyHomePage object that was created by
+        // the App.build method, and use it to set our appbar title.
         title: Text("음성살롱 내용"),
       ),
-        body:SingleChildScrollView(
-        child: Column(children: <Widget>[
-         Container(
+        body: Column(children: <Widget>[
+          Flexible(
               child: ListTile(
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0),
@@ -34,59 +34,31 @@ class _TextchatDetailState extends State<TextchatDetail> {
                           style: TextStyle(
                               color: Color(0xff365859),
                               fontWeight: FontWeight.w800))),
-                  subtitle: Text(chat.contents))
-          ),
-          const ListTile(
+                  subtitle: Text(chat.contents))),
+          Flexible(child: Divider()),
+          Flexible(
+              child: ListTile(
             contentPadding:
                 EdgeInsets.symmetric(horizontal: 40.0, vertical: 15.0),
             title: Padding(
-                padding: EdgeInsets.only(bottom: 5.0),
+                padding: const EdgeInsets.only(bottom: 5.0),
                 child: Text("못말리는상어",
                     style: TextStyle(
                         color: Color(0xff459B99),
                         fontWeight: FontWeight.w800))),
             subtitle: Text("어렵지 않아요. 꼭 편지가 들어가야 선물은 아니잖아요."),
-          ),
-          const ListTile(
+          )),
+          Flexible(
+              child: ListTile(
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 40.0, vertical: 0),
                   title: Padding(
-                      padding: EdgeInsets.only(bottom: 5.0),
+                      padding: const EdgeInsets.only(bottom: 5.0),
                       child: Text("요리가 취미",
                           style: TextStyle(
                               color: Color(0xff459B99),
                               fontWeight: FontWeight.w800))),
-                  subtitle: Text("내용에 의미가 없어도 괜찮아요.")),
-          Container(
-          padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-          child: TextField(
-            decoration: InputDecoration(
-              hintText: '당신의 생각은 어떤가요?',
-              suffixIcon: Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
-                    color: Color(0xff365859)),
-                padding: EdgeInsets.all(14),
-                child: Icon(
-                  Icons.send_rounded,
-                  color: Colors.white,
-                  size: 28,
-                ),
-              ),
-              filled: true,
-              fillColor: Colors.blueGrey[50],
-              labelStyle: TextStyle(fontSize: 12),
-              contentPadding: EdgeInsets.all(20),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey),
-                borderRadius: BorderRadius.circular(25),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey),
-                borderRadius: BorderRadius.circular(25),
-              ),
-            ),
-          ),),
+                  subtitle: Text("내용에 의미가 없어도 괜찮아요."))),
         ])
 
         /*
@@ -98,6 +70,6 @@ class _TextchatDetailState extends State<TextchatDetail> {
       ),
       */
 
-     ) );
+        );
   }
 }

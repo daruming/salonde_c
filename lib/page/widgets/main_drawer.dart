@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:salondec/menu/ratingScreen.dart';
 import 'package:salondec/page/viewmodel/auth_viewmodel.dart';
 
 class MainDrawer extends StatelessWidget {
@@ -38,10 +39,10 @@ class MainDrawer extends StatelessWidget {
             ),
             shape: Border(bottom: BorderSide(color: Color(0xffE5E5E5))),
             onTap: () {
-              /*
+              
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => MyPageScreen()));
-              */
+                  MaterialPageRoute(builder: (context) => RatingScreen()));
+              
             },
           ),
           ListTile(
