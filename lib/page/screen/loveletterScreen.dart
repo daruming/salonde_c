@@ -61,89 +61,94 @@ class _LoveletternewScreenState extends State<LoveletternewScreen> {
               if (viewState is Loading) {
                 return ProgressWidget();
               }
-              return ListView.builder(
-                  itemCount: _ratingViewModel.myGetFavoritePersons.length,
-                  itemBuilder: (context, index) {
-                    return _ratingViewModel
-                                .myGetFavoritePersons[index].matchingYn ==
-                            false
-                        ? InkWell(
-                            onTap: () {
-                              showDialog(
-                                barrierColor: Colors.black26,
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    title: const Text("수락 하시겠습니까?"),
-                                    content: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: <Widget>[
-                                        InkWell(
-                                            onTap: () {
-                                              acceptFavoirteMessage(index);
-                                            },
-                                            child: Text("확인")),
-                                        InkWell(
-                                            onTap: () => Get.back(),
-                                            child: Text("취소")),
-                                      ],
-                                    ),
+              return (_ratingViewModel.myGetFavoritePersons.length - 1) == 0
+                  ? ListView.builder(
+                      itemCount: _ratingViewModel.myGetFavoritePersons.length,
+                      itemBuilder: (context, index) {
+                        return _ratingViewModel
+                                    .myGetFavoritePersons[index].matchingYn ==
+                                false
+                            ? InkWell(
+                                onTap: () {
+                                  showDialog(
+                                    barrierColor: Colors.black26,
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        title: const Text("수락 하시겠습니까?"),
+                                        content: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: <Widget>[
+                                            InkWell(
+                                                onTap: () {
+                                                  acceptFavoirteMessage(index);
+                                                },
+                                                child: Text("확인")),
+                                            InkWell(
+                                                onTap: () => Get.back(),
+                                                child: Text("취소")),
+                                          ],
+                                        ),
+                                      );
+                                    },
                                   );
                                 },
-                              );
-                            },
-                            child: Card(
-                                margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                                elevation: 0.0,
-                                child: ListTile(
-                                  leading:
-                                      // Container(child: Image.asset(images[index])),
-                                      (_ratingViewModel
-                                                      .myGetFavoritePersons[
-                                                          index]
-                                                      .profileImageUrl !=
-                                                  null &&
-                                              _ratingViewModel
-                                                      .myGetFavoritePersons[
-                                                          index]
-                                                      .profileImageUrl !=
-                                                  "")
-                                          ? Container(
-                                              width: 40,
-                                              child: Image.network(
+                                child: Card(
+                                    margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                    elevation: 0.0,
+                                    child: ListTile(
+                                      leading:
+                                          // Container(child: Image.asset(images[index])),
+                                          (_ratingViewModel
+                                                          .myGetFavoritePersons[
+                                                              index]
+                                                          .profileImageUrl !=
+                                                      null &&
+                                                  _ratingViewModel
+                                                          .myGetFavoritePersons[
+                                                              index]
+                                                          .profileImageUrl !=
+                                                      "")
+                                              ? Container(
+                                                  width: 40,
+                                                  child: Image.network(
+                                                      _ratingViewModel
+                                                          .myGetFavoritePersons[
+                                                              index]
+                                                          .profileImageUrl!))
+                                              : Container(
+                                                  width: 40,
+                                                  child: Text("없음"),
+                                                ),
+                                      title: Padding(
+                                          padding:
+                                              EdgeInsets.fromLTRB(0, 15, 0, 10),
+                                          child: Text(
+                                              ("${_ratingViewModel.myGetFavoritePersons[index].name}님에게" +
                                                   _ratingViewModel
                                                       .myGetFavoritePersons[
                                                           index]
-                                                      .profileImageUrl!))
-                                          : Container(
-                                              width: 40,
-                                              child: Text("없음"),
-                                            ),
-                                  title: Padding(
-                                      padding:
-                                          EdgeInsets.fromLTRB(0, 15, 0, 10),
-                                      child: Text(
-                                          ("${_ratingViewModel.myGetFavoritePersons[index].name}님에게" +
+                                                      .rating
+                                                      .toString() +
+                                                  "점을 받았어요!"))),
+                                      subtitle: Padding(
+                                          padding:
+                                              EdgeInsets.fromLTRB(0, 0, 0, 15),
+                                          child: Text(
                                               _ratingViewModel
-                                                  .myGetFavoritePersons[index]
-                                                  .rating
-                                                  .toString() +
-                                              "점을 받았어요!"))),
-                                  subtitle: Padding(
-                                      padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
-                                      child: Text(
-                                          _ratingViewModel
-                                                  .myGetFavoritePersons[index]
-                                                  .message ??
-                                              "",
-                                          style: TextStyle(
-                                              color: Color(0xffC4C4C4)))),
-                                  trailing: Icon(Icons.more_vert),
-                                )),
-                          )
-                        : Container();
-                  });
+                                                      .myGetFavoritePersons[
+                                                          index]
+                                                      .message ??
+                                                  "",
+                                              style: TextStyle(
+                                                  color: Color(0xffC4C4C4)))),
+                                      trailing: Icon(Icons.more_vert),
+                                    )),
+                              )
+                            : Container();
+                      })
+                  : Center(child: Text("도착한 러브레터가 없습니다"));
             }))));
   }
 

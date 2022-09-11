@@ -203,6 +203,50 @@ class UserModel extends Core with EquatableMixin {
       imgUrl3 ?? "",
     ];
   }
+
+  UserModel copyWith({
+    String? uid,
+    String? email,
+    String? gender,
+    String? name,
+    int? age,
+    int? height,
+    int? ratedPersonsLength,
+    double? rating,
+    String? job,
+    String? religion,
+    String? mbti,
+    String? bodytype,
+    String? introduction,
+    String? profileImageUrl,
+    String? character,
+    String? interest,
+    String? imgUrl1,
+    String? imgUrl2,
+    String? imgUrl3,
+  }) {
+    return UserModel(
+      uid: uid ?? this.uid,
+      email: email ?? this.email,
+      gender: gender ?? this.gender,
+      name: name ?? this.name,
+      age: age ?? this.age,
+      height: height ?? this.height,
+      ratedPersonsLength: ratedPersonsLength ?? this.ratedPersonsLength,
+      rating: rating ?? this.rating,
+      job: job ?? this.job,
+      religion: religion ?? this.religion,
+      mbti: mbti ?? this.mbti,
+      bodytype: bodytype ?? this.bodytype,
+      introduction: introduction ?? this.introduction,
+      profileImageUrl: profileImageUrl ?? this.profileImageUrl,
+      character: character ?? this.character,
+      interest: interest ?? this.interest,
+      imgUrl1: imgUrl1 ?? this.imgUrl1,
+      imgUrl2: imgUrl2 ?? this.imgUrl2,
+      imgUrl3: imgUrl3 ?? this.imgUrl3,
+    );
+  }
 }
 
 class CoinModel extends Core {

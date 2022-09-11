@@ -26,6 +26,9 @@ class AuthViewModel extends GetxController {
 
   RxBool userSignUpState = false.obs;
 
+  final Rxn<ViewState> _loginScreenViewState = Rxn(Initial());
+  ViewState get loginScreenViewState => _loginScreenViewState.value!;
+
   final Rxn<ViewState> _homeViewState = Rxn(Initial());
   ViewState get homeViewState => _homeViewState.value!;
 
@@ -64,6 +67,7 @@ class AuthViewModel extends GetxController {
   // RxList<UserModel> userModelListUnderFivePeople = <UserModel>[].obs;
   Rxn<UserModel> userModelUnderFivePeople = Rxn(null);
 
+  bool profileDataNullCheck = false;
   RxInt _initNum = 0.obs;
   int get initNum => _initNum.value;
 
@@ -95,6 +99,66 @@ class AuthViewModel extends GetxController {
     await getUserInfo();
     await getMainPageInfo(uid: user!.uid, gender: userModel.value!.gender);
     await getMyCoins();
+    // await userValueCheck();
+  }
+
+  Future<void> userValueCheckInLoginScreen() async {
+    _currentUser();
+    await getUserInfo();
+  }
+
+  void userValueCheck() {
+    if ((userModel.value!.profileImageUrl == '' ||
+            userModel.value!.profileImageUrl == null) ||
+        (userModel.value!.name == '' || userModel.value!.name == null) ||
+        (userModel.value!.job == '' || userModel.value!.job == null) ||
+        (userModel.value!.religion == '' ||
+            userModel.value!.religion == null) ||
+        (userModel.value!.bodytype == '' ||
+            userModel.value!.bodytype == null) ||
+        (userModel.value!.age == 0 || userModel.value!.age == null) ||
+        (userModel.value!.height == 0 || userModel.value!.height == null) ||
+        (userModel.value!.mbti == '' || userModel.value!.mbti == null) ||
+        (userModel.value!.name == '' || userModel.value!.name == null) ||
+        (userModel.value!.imgUrl1 == '' || userModel.value!.imgUrl1 == null) ||
+        (userModel.value!.imgUrl2 == '' || userModel.value!.imgUrl2 == null)) {
+      _setState(_loginScreenViewState, Empty());
+    } else {
+      _setState(_loginScreenViewState, Loaded());
+    }
+  }
+
+  void userValueCheckInProfile(UserModel profileUsermodel) {
+    UserModel? userModels;
+
+    userModels = profileUsermodel.copyWith();
+    userModels.profileImageUrl =
+        photoMap["profileImageUrl"] != null ? 'ok' : '';
+    userModels.imgUrl1 = photoMap["imgUrl1"] != null ? 'ok' : '';
+    userModels.imgUrl2 = photoMap["imgUrl2"] != null ? 'ok' : '';
+    // if (profileUsermodel != null) {
+    //   userModels = userModel.value!.copyWith();
+    // }
+
+    if ((userModels.profileImageUrl == '' ||
+                userModels.profileImageUrl == null) ||
+            (userModels.name == '' || userModels.name == null) ||
+            (userModels.job == '' || userModels.job == null) ||
+            (userModels.religion == '' || userModels.religion == null) ||
+            (userModels.bodytype == '' || userModels.bodytype == null) ||
+            (userModels.age == 0 || userModels.age == null) ||
+            (userModels.height == 0 || userModels.height == null) ||
+            (userModels.mbti == '' || userModels.mbti == null) ||
+            (userModels.name == '' || userModels.name == null) ||
+            (userModels.imgUrl1 == '' || userModels.imgUrl1 == null) ||
+            (userModels.imgUrl2 == '' || userModels.imgUrl2 == null)
+        // (userModel.value!.interest == '' ||
+        //     userModel.value!.interest == null)
+        ) {
+      profileDataNullCheck = true;
+    } else {
+      profileDataNullCheck = false;
+    }
   }
 
   // sign up 은 우선 이메일, 비번으로 아디 만들고
@@ -319,6 +383,7 @@ class AuthViewModel extends GetxController {
         _setUserModel(userModel, tempModel);
         // userModel.value = tempModel;
         gender = userModel.value?.gender ?? "";
+        userValueCheck();
       }
     } catch (e) {
       _catchError(e);
@@ -450,8 +515,11 @@ class AuthViewModel extends GetxController {
 
   void _setUserModel(Rxn<UserModel> userModel, UserModel model) =>
       userModel.value = model;
-  void _setState(Rxn<ViewState> state, ViewState nextState) =>
+  void _setState(Rxn<ViewState> state, ViewState nextState) {
+    if (state.value.runtimeType != nextState.runtimeType) {
       state.value = nextState;
+    }
+  }
 
   bool checkImgUrl(String? url) {
     return (url != null && url != '') ? true : false;

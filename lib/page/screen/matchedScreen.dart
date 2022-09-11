@@ -39,60 +39,67 @@ class _MatchedScreenState extends State<MatchedScreen> {
                 mainAxisSpacing: 12.0),
             itemBuilder: (BuildContext context, int index) {
               var model = _findGenderModelwithMatchingFavoritePersons(index);
-              return GestureDetector(
-                onTap: () {
-                  _ratingViewModel.isRatedPersons(targetUid: model.uid);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Todaydetail(true,
-                            // genderModel: _authViewModel.genderModelList[index]),
-                            genderModel: model),
-                      ));
-                },
-                child: Card(
-                  shadowColor: Colors.transparent,
-                  child: Stack(
-                      alignment: FractionalOffset.bottomCenter,
-                      children: <Widget>[
-                        Container(
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: NetworkImage(
-                                      model.profileImageUrl!,
-                                    ),
-                                    fit: BoxFit.fitHeight))),
-                        Container(
-                          color: Colors.white,
-                          alignment: Alignment.center,
-                          height: 40.0,
-                          child: Row(children: <Widget>[
-                            Expanded(
-                                child: Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                    // child: Text(doc['title'],
-                                    child: Text(model.name ?? "",
-                                        style: const TextStyle(
-                                            fontSize: 16.0,
-                                            fontFamily: 'Gothic A1',
-                                            fontWeight: FontWeight.w600)))),
-                            Expanded(
-                                child: Text(
-                                    _eachText(model, "age") +
-                                        ' | ' +
-                                        _eachText(model, "job") +
-                                        ' | ' +
-                                        _eachText(model, "mbti"),
-                                    style: const TextStyle(
-                                        fontSize: 10.0,
-                                        fontFamily: 'Gothic A1',
-                                        fontWeight: FontWeight.w400))),
-                          ]),
-                        ),
-                      ]),
-                ),
-              );
+
+              return model == null
+                  ? Container()
+                  : GestureDetector(
+                      onTap: () {
+                        _ratingViewModel.isRatedPersons(targetUid: model.uid);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Todaydetail(true,
+                                  // genderModel: _authViewModel.genderModelList[index]),
+                                  genderModel: model),
+                            ));
+                      },
+                      child: Card(
+                        shadowColor: Colors.transparent,
+                        child: Stack(
+                            alignment: FractionalOffset.bottomCenter,
+                            children: <Widget>[
+                              (model.profileImageUrl == '' ||
+                                      model.profileImageUrl == null)
+                                  ? Container()
+                                  : Container(
+                                      decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                              image: NetworkImage(
+                                                model.profileImageUrl!,
+                                              ),
+                                              fit: BoxFit.fitHeight))),
+                              Container(
+                                color: Colors.white,
+                                alignment: Alignment.center,
+                                height: 40.0,
+                                child: Row(children: <Widget>[
+                                  Expanded(
+                                      child: Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              10, 0, 0, 0),
+                                          // child: Text(doc['title'],
+                                          child: Text(model.name ?? "",
+                                              style: const TextStyle(
+                                                  fontSize: 16.0,
+                                                  fontFamily: 'Gothic A1',
+                                                  fontWeight:
+                                                      FontWeight.w600)))),
+                                  Expanded(
+                                      child: Text(
+                                          _eachText(model, "age") +
+                                              ' | ' +
+                                              _eachText(model, "job") +
+                                              ' | ' +
+                                              _eachText(model, "mbti"),
+                                          style: const TextStyle(
+                                              fontSize: 10.0,
+                                              fontFamily: 'Gothic A1',
+                                              fontWeight: FontWeight.w400))),
+                                ]),
+                              ),
+                            ]),
+                      ),
+                    );
             });
       }),
     );

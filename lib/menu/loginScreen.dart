@@ -6,6 +6,7 @@ import 'package:salondec/page/mainPage.dart';
 import 'package:salondec/page/viewmodel/auth_viewmodel.dart';
 import 'package:salondec/widgets/login/login_page.dart';
 import 'package:salondec/widgets/login/signup_page.dart';
+import 'package:salondec/widgets/mypage/myProfile.dart';
 
 //This is related to "https://www.youtube.com/watch?v=4vKiJZNPhss&ab_channel=JohannesMilke"
 
@@ -26,7 +27,12 @@ class _LoginScreenState extends State<LoginScreen> {
     // if (_authViewModel.initNum == 0) {
     // _authViewModel.init();
     // }
+    init();
     super.initState();
+  }
+
+  void init() async {
+    await _authViewModel.userValueCheckInLoginScreen();
   }
 
   // This widget is the root of your application.
@@ -43,7 +49,13 @@ class _LoginScreenState extends State<LoginScreen> {
             return Center(child: Text("something went wrong"));
           } else if (snapshot.hasData) {
             print("로그인되어있어용");
-            return MainPage();
+            return Obx(() {
+              var viewState = _authViewModel.loginScreenViewState;
+              if (viewState is Loaded) {
+                return MainPage();
+              }
+              return MyProfileScreen();
+            });
           } else {
             return Obx(() {
               if (_authViewModel.userSignUpState.value) {
