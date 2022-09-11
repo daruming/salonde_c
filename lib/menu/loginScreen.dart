@@ -33,45 +33,53 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void init() async {
-    await _authViewModel.userValueCheckInLoginScreen();
+    if (_authViewModel.loginScreenCheck != 1) {
+      await _authViewModel.userValueCheckInLoginScreen(loginScreenCheckNum: 1);
+    }
   }
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            print("가는중");
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            print("문제있어용");
-            return Center(child: Text("something went wrong"));
-          } else if (snapshot.hasData) {
-            if (_authViewModel.userCredentialKey == null) {
-              _authViewModel.signOut();
-            }
-            // print("user.currentUser ${user.currentUser}");
-            print("로그인되어있어용");
-            return Obx(() {
-              var viewState = _authViewModel.loginScreenViewState;
-              if (viewState is Loaded) {
-                return MainPage();
-              }
-              // return MainPage();
-              return MyProfileScreen();
-            });
-          } else {
-            return Obx(() {
-              if (_authViewModel.userSignUpState.value) {
-                return SignupPage();
-              } else {
-                print("로그인하러가용");
+    return Scaffold(
+      body: StreamBuilder<User?>(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              print("가는중");
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              print("문제있어용");
+              return Center(child: Text("something went wrong"));
+            } else if (snapshot.hasData) {
+              if (_authViewModel.userCredentialKey == null) {
+                _authViewModel.signOut();
                 return LoginPage();
+              } else {
+                // print("user.currentUser ${user.currentUser}");
+                print("로그인되어있어용");
+                return Obx(() {
+                  // var viewState = _authViewModel.loginScreenViewState;
+                  // if (viewState is Loaded) {
+                  // }
+                  // return MainPage();
+                  if (_authViewModel.userValueCheckBool()) {
+                    return MyProfileScreen();
+                  }
+                  return MainPage();
+                });
               }
-            });
-          }
-        });
+            } else {
+              return Obx(() {
+                if (_authViewModel.userSignUpState.value) {
+                  return SignupPage();
+                } else {
+                  print("로그인하러가용");
+                  return LoginPage();
+                }
+              });
+            }
+          }),
+    );
   }
 }
