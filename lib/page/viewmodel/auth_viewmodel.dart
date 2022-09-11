@@ -47,6 +47,7 @@ class AuthViewModel extends GetxController {
   Rxn<UserModel> userModel = Rxn();
   Rx<CoinModel?> _userCoin = null.obs;
   CoinModel get userCoin => _userCoin.value!;
+  UserCredential? userCredentialKey;
 
   Rx<UploadState> _uploadState = UploadState.initial.obs;
   UploadState get uploadState => _uploadState.value;
@@ -112,7 +113,9 @@ class AuthViewModel extends GetxController {
 
   Future<void> userValueCheckInLoginScreen() async {
     _currentUser();
-    await getUserInfo();
+    if (_user.value != null) {
+      await getUserInfo();
+    }
   }
 
   void userValueCheck() {
@@ -182,7 +185,7 @@ class AuthViewModel extends GetxController {
 
       UserCredential userCredential = await _firebaseAuth
           .createUserWithEmailAndPassword(email: email, password: password);
-
+      userCredentialKey = userCredential;
       UserModel userModelTemp = UserModel(
         uid: userCredential.user?.uid ?? "",
         email: userCredential.user?.email ?? "",
@@ -239,6 +242,8 @@ class AuthViewModel extends GetxController {
 
       UserCredential userCredential = await _firebaseAuth
           .signInWithEmailAndPassword(email: email, password: password);
+      userCredentialKey = userCredential;
+
       _user.value = userCredential.user;
       // storage.write(key: "uid", value: userCredential.user!.uid);
       _setState(_signInViewState, Loaded());

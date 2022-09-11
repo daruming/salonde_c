@@ -27,6 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
     // if (_authViewModel.initNum == 0) {
     // _authViewModel.init();
     // }
+
     init();
     super.initState();
   }
@@ -48,6 +49,10 @@ class _LoginScreenState extends State<LoginScreen> {
             print("문제있어용");
             return Center(child: Text("something went wrong"));
           } else if (snapshot.hasData) {
+            if (_authViewModel.userCredentialKey == null) {
+              _authViewModel.signOut();
+            }
+            // print("user.currentUser ${user.currentUser}");
             print("로그인되어있어용");
             return Obx(() {
               var viewState = _authViewModel.loginScreenViewState;
