@@ -44,10 +44,11 @@ class _RatingScreenState extends State<RatingScreen> {
             LinearGradient(colors: color, stops: stops);
 
     final mediaQuery = MediaQuery.of(context);
-    double height = mediaQuery.size.height*0.6;
+    double height = mediaQuery.size.height*0.5;
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
               toolbarHeight: height,
               flexibleSpace: FlexibleSpaceBar(
               centerTitle: true,
@@ -55,7 +56,25 @@ class _RatingScreenState extends State<RatingScreen> {
               height: 100,
               child: Align(
               alignment: Alignment.bottomCenter,
+              child:Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        _authViewModel.userModel.value?.rating.toString() ?? "" + '점', 
+                        style: TextStyle(
+                          color: Color(0xff365859),
+                          fontSize: 50,
+                          fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ]
               )
+              ),
             ),
             background: Stack(
               fit: StackFit.expand,
@@ -112,56 +131,131 @@ class _RatingScreenState extends State<RatingScreen> {
                   ),
               ),
             ),
-      body: Container(
-        padding: EdgeInsets.fromLTRB(20, 20, 0, 0),
-        child: Row(
-        children: [
-          SizedBox(
-            height: 200,
-            child: Column(
-            children: const [
-              Spacer(), 
-              Icon(Icons.star, color: Colors.grey,size: 20.0,),
-              Spacer(), 
-              Icon(Icons.star, color: Colors.grey,size: 20.0,),
-              Spacer(), 
-              Icon(Icons.star, color: Colors.grey,size: 20.0,),
-              Spacer(), 
-              Icon(Icons.star, color: Colors.grey,size: 20.0,),
-              Spacer(), 
-              Icon(Icons.star, color: Colors.grey,size: 20.0,),
-              Spacer(), 
-            ]
-            )
-          ),
-          Expanded(
-            child: SizedBox(
-              height: 200,
-              child: SfCartesianChart(
-                plotAreaBorderColor: Colors.transparent,
-                primaryXAxis: CategoryAxis(),
-                primaryYAxis: NumericAxis(isVisible: false),
-                series: <ChartSeries<_ChartData, String>>[
-                  BarSeries<_ChartData, String>(
-                      animationDuration: 4500,
-                      dataSource: data,
-                      xValueMapper: (_ChartData data, _) => data.x,
-                      yValueMapper: (_ChartData data, _) => data.y,
-                      borderRadius: const BorderRadius.only(
-                        topRight: Radius.circular(25),
-                        bottomRight: Radius.circular(25)
+      body: ListView(
+                padding: EdgeInsets.all(30),
+                children: [
+                  Container(
+                    padding: EdgeInsets.fromLTRB(20, 20, 0, 0),
+                    child: Row(
+                    children: [
+                      SizedBox(
+                        height: 200,
+                        child: Column(
+                        children: [
+                          Spacer(),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon( // <-- Icon
+                                Icons.star,
+                                size: 20.0,
+                              ), // <-- Text
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text('1점'),
+                            ],
+                          ),
+                          Spacer(), 
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon( // <-- Icon
+                                Icons.star,
+                                size: 20.0,
+                              ), // <-- Text
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text('2점'),
+                            ],
+                          ),
+                          Spacer(), 
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon( // <-- Icon
+                                Icons.star,
+                                size: 20.0,
+                              ), // <-- Text
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text('3점'),
+                            ],
+                          ),
+                          Spacer(), 
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon( // <-- Icon
+                                Icons.star,
+                                size: 20.0,
+                              ), // <-- Text
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text('4점'),
+                            ],
+                          ),
+                          Spacer(), 
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon( // <-- Icon
+                                Icons.star,
+                                size: 20.0,
+                              ), // <-- Text
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text('5점'),
+                            ],
+                          ),
+                          Spacer(), 
+                        ]
+                        )
                       ),
-                      gradient: gradientColors,
-                      
+                      Expanded(
+                        child: SizedBox(
+                          height: 200,
+                          child: SfCartesianChart(
+                            plotAreaBorderColor: Colors.transparent,
+                            primaryXAxis: CategoryAxis(isVisible: false),
+                            primaryYAxis: NumericAxis(isVisible: false),
+                            series: <ChartSeries<_ChartData, String>>[
+                              BarSeries<_ChartData, String>(
+                                  animationDuration: 4500,
+                                  dataSource: data,
+                                  xValueMapper: (_ChartData data, _) => data.x,
+                                  yValueMapper: (_ChartData data, _) => data.y,
+                                  borderRadius: const BorderRadius.only(
+                                    topRight: Radius.circular(25),
+                                    bottomRight: Radius.circular(25)
+                                  ),
+                                  gradient: gradientColors,
+                                  
+                              )
+                            ]
+                          )
+                        )
+                      ),  
+                    ]
                   )
+                  ),
+                  SizedBox(height: 40,),
+                  
+                  ElevatedButton(
+                      
+                      style: ElevatedButton.styleFrom(
+                        primary: Color(0xff365859),
+                        minimumSize: Size.fromHeight(50),
+                      ),
+                      child: Text('새로 측정하기'),
+                      onPressed: () {
+                      }),
                 ]
-              )
-            )
-          ),
-          
-        ]
-      )
-      )
+              ),
     );
   }
 }
