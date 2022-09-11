@@ -42,8 +42,12 @@ class _TextchatDetailState extends State<TextchatDetail> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor: Color(0xff365859),
-        title: const Text("음성살롱 내용"),
+          iconTheme: IconThemeData(
+              color: Colors.white, //change your color here
+            ),
+          backgroundColor: Color(0xff365859),
+          foregroundColor: Colors.white,
+          title: Text("문자살롱",style: TextStyle(fontSize: 20.0, color: Colors.white)),
       ),
       body:
           // Obx(() {
