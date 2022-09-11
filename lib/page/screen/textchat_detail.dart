@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:salondec/data/model/chat.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 // ignore: must_be_immutable
 class TextchatDetail extends StatefulWidget {
@@ -12,6 +13,11 @@ class TextchatDetail extends StatefulWidget {
 }
 
 class _TextchatDetailState extends State<TextchatDetail> {
+  TextEditingController _replyFieldController = TextEditingController();
+  final Map<String, List<String>> _seniorMember = {}; 
+  final Map<String, int> _replyList = {};
+  String myreply = '';
+
   @override
   Widget build(BuildContext context) {
     final chat = widget.chat;
@@ -36,68 +42,66 @@ class _TextchatDetailState extends State<TextchatDetail> {
                               fontWeight: FontWeight.w800))),
                   subtitle: Text(chat.contents))
           ),
-          const ListTile(
-            contentPadding:
-                EdgeInsets.symmetric(horizontal: 40.0, vertical: 15.0),
-            title: Padding(
-                padding: EdgeInsets.only(bottom: 5.0),
-                child: Text("못말리는상어",
-                    style: TextStyle(
-                        color: Color(0xff459B99),
-                        fontWeight: FontWeight.w800))),
-            subtitle: Text("어렵지 않아요. 꼭 편지가 들어가야 선물은 아니잖아요."),
-          ),
-          const ListTile(
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 40.0, vertical: 0),
-                  title: Padding(
-                      padding: EdgeInsets.only(bottom: 5.0),
-                      child: Text("요리가 취미",
-                          style: TextStyle(
-                              color: Color(0xff459B99),
-                              fontWeight: FontWeight.w800))),
-                  subtitle: Text("내용에 의미가 없어도 괜찮아요.")),
           Container(
-          padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-          child: TextField(
-            decoration: InputDecoration(
-              hintText: '당신의 생각은 어떤가요?',
-              suffixIcon: Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
-                    color: Color(0xff365859)),
-                padding: EdgeInsets.all(14),
-                child: Icon(
-                  Icons.send_rounded,
-                  color: Colors.white,
-                  size: 28,
+            child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: _replyList.length,
+            itemBuilder: (context, index) {
+              return Card(
+                  color: Colors.transparent,
+                  margin: EdgeInsets.fromLTRB(30, 5, 10, 5),
+                  elevation: 0.0,
+                  child: ListTile(
+                    title: Text("유저아이디", style: TextStyle(
+                        color: Color(0xff459B99),
+                        fontWeight: FontWeight.w800)),
+                    subtitle: Text(_replyList.keys.toList()[index],),
+                    trailing: Text(timeago.format(DateTime.now()).toString()),
+                  )
+                );
+            },
+          ),
+        ),
+          Container(
+            padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+            child: Row(
+              children: [
+              Expanded(
+                child: TextField(
+                  controller: _replyFieldController,
+                  decoration: InputDecoration(
+                    hintText: '당신의 생각은 어떤가요?',
+                  )
+                )
+              ),
+              const SizedBox(width: 15),
+              Container(
+                padding: const EdgeInsets.all(15.0),
+                decoration: const BoxDecoration(
+                    color: Color(0xff365859), shape: BoxShape.circle),
+                child: InkWell(
+                  child: const Icon(
+                    Icons.send, color: Colors.white,
+                  ),
+                  onTap: (){
+                    _createReply(_replyFieldController.text);
+                  },
                 ),
-              ),
-              filled: true,
-              fillColor: Colors.blueGrey[50],
-              labelStyle: TextStyle(fontSize: 12),
-              contentPadding: EdgeInsets.all(20),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey),
-                borderRadius: BorderRadius.circular(25),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey),
-                borderRadius: BorderRadius.circular(25),
-              ),
-            ),
-          ),),
-        ])
+              )
+            ]
+          )
+        )
+    ]
+     ) ));
+  }
+  Future<void> _createReply(String replyName) async {
+    setState(() {
+      _replyList.putIfAbsent(replyName, () => 1);
+      _seniorMember.putIfAbsent(replyName, () => []);
+      myreply = replyName;
+    });
+    _replyFieldController.clear();
 
-        /*
-      ListTile(
-      contentPadding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0),
-      title: Padding(padding: const EdgeInsets.only(bottom: 15.0),
-        child: Text(chat.titles, style: TextStyle(color: Color(0xff365859), fontWeight : FontWeight.w800))),
-      subtitle: Text(chat.contents)
-      ),
-      */
-
-     ) );
+    print('List of channels : $_replyList');
   }
 }
