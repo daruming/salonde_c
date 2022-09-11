@@ -40,7 +40,9 @@ class _VoiceChatLobbyScreenState extends State<VoiceChatLobbyScreen> {
   Future<void> initialize() async {}
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
+    return Scaffold(
+      backgroundColor: Color(0xffF4F4F4),
+      body: Column(children: [
       Center(
           child: Column(children: [
         const Padding(
@@ -101,7 +103,7 @@ class _VoiceChatLobbyScreenState extends State<VoiceChatLobbyScreen> {
           },
         ),
       ),
-    ]);
+    ]));
   }
 
   Future<void> _createChannels(String channelName) async {
