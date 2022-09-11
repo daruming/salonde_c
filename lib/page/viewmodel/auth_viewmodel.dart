@@ -87,6 +87,8 @@ class AuthViewModel extends GetxController {
     // userModel.value = null;
     userModel = Rxn();
     _setState(_homeViewState, Initial());
+    _setState(_loginScreenViewState, Initial());
+    // _setState(_homeViewState, Initial());
     _errorState = ErrorState.none;
   }
 

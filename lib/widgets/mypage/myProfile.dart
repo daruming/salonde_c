@@ -148,7 +148,9 @@ class _MyProfileScreenState extends State<MyProfileScreen>
   Future uploadFile(BuildContext context) async {
     var userModel = _makeTempUserModel();
     await _authViewModel.upLoadFiles(userModel);
-    Navigator.pop(context);
+    if (_authViewModel.loginScreenViewState is Empty) {
+      Navigator.pop(context);
+    }
     print("완료");
   }
 
@@ -162,7 +164,7 @@ class _MyProfileScreenState extends State<MyProfileScreen>
             context: context,
             builder: (context) {
               return const CustomAlertDialog(
-                title: "개인 정보를 입력하셔야 이용할 수 있습니다",
+                title: "프로필을 작성하셔야 합니다",
                 //description: "Custom Popup dialog Description.",
               );
             },
@@ -266,9 +268,10 @@ class _MyProfileScreenState extends State<MyProfileScreen>
                               decoration: InputDecoration(
                                 // hintText: '나이',
                                 hintText: _hintTextInNumber(
-                                    _authViewModel.userModel.value?.age
-                                            .toString() ??
-                                        "",
+                                    _authViewModel.userModel.value?.age == null
+                                        ? ""
+                                        : _authViewModel.userModel.value?.age
+                                            .toString(),
                                     '나이'),
                                 contentPadding: EdgeInsets.all(10),
                               ),
@@ -308,9 +311,12 @@ class _MyProfileScreenState extends State<MyProfileScreen>
                                 controller: _heightController,
                                 decoration: InputDecoration(
                                   hintText: _hintTextInNumber(
-                                      _authViewModel.userModel.value?.height
-                                              .toString() ??
-                                          "",
+                                      _authViewModel.userModel.value?.height ==
+                                              null
+                                          ? ""
+                                          : _authViewModel
+                                              .userModel.value?.height
+                                              .toString(),
                                       '키'),
                                   contentPadding: EdgeInsets.all(10),
                                 ),
