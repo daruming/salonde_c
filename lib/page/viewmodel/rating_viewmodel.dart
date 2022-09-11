@@ -12,8 +12,6 @@ import 'package:salondec/data/model/rating_model.dart';
 import 'package:salondec/data/model/user_model.dart';
 
 class RatingViewModel extends GetxController {
-  // final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  // final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
   ErrorState _errorState = ErrorState.none;
@@ -283,7 +281,7 @@ class RatingViewModel extends GetxController {
     // required String targetUid,
   }) async {
     try {
-      var date = DateTime.now();
+      var now = DateTime.now();
       List<FavoriteModel> tempList = [];
       matchingFavoritePersons.clear();
       waitingFavoritePersons.clear();
@@ -332,23 +330,15 @@ class RatingViewModel extends GetxController {
           waitingFavoritePersons.add(model);
         }
       }
+      // gone 유저들
+      for (var model in allGetFavoritePersons) {
+        var user = _over3daysFavoriteUser(model, now);
+        if (!model.matchingYn && user != null) {
+          goneFavoritePersons.add(user);
+        }
+      }
 
       _setState(_luvLetterViewState, Loaded());
-
-      // if (temp.isNotEmpty) {
-      //   for (var model in temp) {
-      //     tempList.add(model);
-      //   }
-      // }
-      // if (favoritePersons.isNotEmpty) {
-      //   for (var i = 0; i < tempList.length; i++) {
-      //     if (!favoritePersons.contains(tempList[i])) {
-      //       favoritePersons.add(tempList[i]);
-      //     }
-      //   }
-      // } else {
-      //   favoritePersons.addAll(tempList);
-      // }
     } on FirebaseException catch (e) {
       if (e.code == "network-request-failed") {
         _errorState = ErrorState.network;
@@ -358,6 +348,15 @@ class RatingViewModel extends GetxController {
     } catch (e) {
       _catchError(e);
     }
+  }
+
+  FavoriteModel? _over3daysFavoriteUser(FavoriteModel model, DateTime today) {
+    if (model.createdAt!.year - today.year > 0 ||
+        model.createdAt!.month - today.month > 0 ||
+        model.createdAt!.day - today.day > 3) {
+      return model;
+    }
+    return null;
   }
 
   Future<bool> checkAleadySendFavoirteMessage({

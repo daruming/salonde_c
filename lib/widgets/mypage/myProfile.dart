@@ -10,6 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:salondec/component/custom_form_buttom.dart';
 import 'package:salondec/component/custom_input_field.dart';
+import 'package:salondec/core/constant.dart';
 import 'package:salondec/core/define.dart';
 
 import 'package:salondec/data/model/user_model.dart';
@@ -17,152 +18,6 @@ import 'package:salondec/page/viewmodel/auth_viewmodel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:salondec/component/custom_alert_dialog.dart';
 import 'package:salondec/page/widgets/progress_widget.dart';
-
-List<String> heightItem = [
-  "150",
-  "151",
-  "152",
-  "153",
-  "154",
-  "155",
-  "156",
-  "157",
-  "158",
-  "159",
-  "160",
-  "161",
-  "162",
-  "163",
-  "164",
-  "165",
-  "166",
-  "167",
-  "168",
-  "169",
-  "170",
-  "171",
-  "172",
-  "173",
-  "174",
-  "175",
-  "176",
-  "177",
-  "178",
-  "179",
-  "180",
-  "181",
-  "182",
-  "183",
-  "184",
-  "185",
-  "186",
-  "187",
-  "188",
-  "189",
-];
-
-List<String> bodyTypeItem = ["마름", "슬림한", "보통", "통통한", "뚱뚱한"];
-
-List<String> religionItem = ["기독도", "천주교", "불교", "무교"];
-
-List<String> mbtiItem = [
-  "ISTJ",
-  "ISFJ",
-  "INFJ",
-  "INTJ",
-  "ISTP",
-  "ISFP",
-  "INFP",
-  "INTP",
-  "ESTP",
-  "ESFP",
-  "ENFP",
-  "ENTP",
-  "ESTJ",
-  "ESFJ",
-  "ENFJ",
-  "ENTJ"
-];
-
-List<String> jobItem = [
-  "CEO",
-  "의사",
-  "개인사업",
-  "변호사",
-  "아나운서",
-  "승무원",
-  "애널리스트",
-  "펀드매니저",
-  "교사",
-  "약사",
-  "투자업",
-  "한의사",
-  "치과의사",
-  "수의사",
-  "은행원",
-  "스포츠선수",
-  "첼리스트",
-  "작곡가",
-  "가수",
-  "무용수",
-  "디자이너",
-  "방송인",
-  "모델",
-  "연주자",
-  "대학원(석사)",
-  "대학원(박사)",
-  "판사",
-  "변리사",
-  "법무사",
-  "세무사",
-  "5급공무원",
-  "회계사",
-  "감정평가사",
-  "파일럿",
-  "사무관",
-  "국회의원",
-  "비서관",
-  "시의원",
-  "구의원",
-  "MD",
-  "교직원",
-  "공무원",
-  "기자",
-  "앵커",
-  "캐스터",
-  "PD",
-  "작가",
-  "건설업",
-  "마케터",
-  "요리사/셰프",
-  "치위생사",
-  "간호사",
-  "간호조무사",
-  "연구원",
-  "플로리스트",
-  "물리치료사",
-  "국내영업",
-  "해외영업",
-  "호텔리어",
-  "영양사",
-  "의료기사",
-  "미용사",
-  "관세사",
-  "피부관리사",
-  "임대업자",
-  "큐레이터",
-  "무영업",
-  "노무사",
-  "입상병리사",
-  "스포츠강사",
-  "무용강사",
-  "사회복지사",
-  "일반사무직",
-  "학부",
-  "네일아티스트",
-  "프리랜서",
-  "기타"
-];
 
 class MyProfileScreen extends StatefulWidget {
   const MyProfileScreen({Key? key}) : super(key: key);
@@ -445,16 +300,18 @@ class _MyProfileScreenState extends State<MyProfileScreen>
                                               diameterRatio: 1,
                                               onSelectedItemChanged: (i) {
                                                 setState(() {
-                                                  print(
-                                                      heightItem[i].toString());
+                                                  print(Constants.heightItem[i]
+                                                      .toString());
                                                   _heightController.text =
-                                                      heightItem[i].toString();
+                                                      Constants.heightItem[i]
+                                                          .toString();
                                                 });
                                               },
                                               children: [
-                                                ...heightItem.map((e) => Text(
-                                                      e,
-                                                    ))
+                                                ...Constants.heightItem
+                                                    .map((e) => Text(
+                                                          e,
+                                                        ))
                                               ]));
                                     });
                               }),
@@ -492,13 +349,14 @@ class _MyProfileScreenState extends State<MyProfileScreen>
                                               onSelectedItemChanged: (i) {
                                                 setState(() {
                                                   _jobController.text =
-                                                      jobItem[i];
+                                                      Constants.jobItem[i];
                                                 });
                                               },
                                               children: [
-                                                ...jobItem.map((e) => Text(
-                                                      e,
-                                                    ))
+                                                ...Constants.jobItem
+                                                    .map((e) => Text(
+                                                          e,
+                                                        ))
                                               ]));
                                     });
                               }),
@@ -531,13 +389,14 @@ class _MyProfileScreenState extends State<MyProfileScreen>
                                               onSelectedItemChanged: (i) {
                                                 setState(() {
                                                   _bodyTypeController.text =
-                                                      bodyTypeItem[i];
+                                                      Constants.bodyTypeItem[i];
                                                 });
                                               },
                                               children: [
-                                                ...bodyTypeItem.map((e) => Text(
-                                                      e,
-                                                    ))
+                                                ...Constants.bodyTypeItem
+                                                    .map((e) => Text(
+                                                          e,
+                                                        ))
                                               ]));
                                     });
                               }),
@@ -576,13 +435,14 @@ class _MyProfileScreenState extends State<MyProfileScreen>
                                               onSelectedItemChanged: (i) {
                                                 setState(() {
                                                   _religionController.text =
-                                                      religionItem[i];
+                                                      Constants.religionItem[i];
                                                 });
                                               },
                                               children: [
-                                                ...religionItem.map((e) => Text(
-                                                      e,
-                                                    ))
+                                                ...Constants.religionItem
+                                                    .map((e) => Text(
+                                                          e,
+                                                        ))
                                               ]));
                                     });
                               }),
@@ -613,13 +473,14 @@ class _MyProfileScreenState extends State<MyProfileScreen>
                                               onSelectedItemChanged: (i) {
                                                 setState(() {
                                                   _mbtiController.text =
-                                                      mbtiItem[i];
+                                                      Constants.mbtiItem[i];
                                                 });
                                               },
                                               children: [
-                                                ...mbtiItem.map((e) => Text(
-                                                      e,
-                                                    ))
+                                                ...Constants.mbtiItem
+                                                    .map((e) => Text(
+                                                          e,
+                                                        ))
                                               ]));
                                     });
                               }),

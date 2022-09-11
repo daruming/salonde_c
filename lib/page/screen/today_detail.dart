@@ -10,10 +10,10 @@ import 'package:salondec/page/viewmodel/auth_viewmodel.dart';
 import 'package:salondec/page/viewmodel/rating_viewmodel.dart';
 
 class Todaydetail extends StatefulWidget {
-  // final Note note;
+  bool matched;
   final GenderModel genderModel;
-  Todaydetail(this.genderModel);
 
+  Todaydetail(this.matched, {required this.genderModel});
   List<String> images = ["assets/image/profile_detail1.png"];
   @override
   _TodaydetailState createState() => _TodaydetailState();
@@ -28,6 +28,7 @@ class _TodaydetailState extends State<Todaydetail> {
   @override
   void dispose() {
     _ratingViewModel.delete();
+
     super.dispose();
   }
 
@@ -93,43 +94,7 @@ class _TodaydetailState extends State<Todaydetail> {
                       const Padding(
                         padding: EdgeInsets.all(2.0),
                       ),
-                      RaisedButton(
-                        onPressed: () {
-                          if (_ratingViewModel.targetDetail.value != null) {
-                            showDialog(
-                              barrierColor: Color(0xff365859).withOpacity(0.5),
-                              context: context,
-                              builder: (context) {
-                                return CustomLoveLetter(
-                                  func: sendFavoriteMessage,
-                                  genderModel: widget.genderModel,
-                                  title:
-                                      "호감을 보내고 상대방이 수락하면 바로 연락처를 알 수 있습니다.[부분무료]",
-                                  hint: "설레는 마음을 담아 메세지를 작성해보아요 :)",
-                                );
-                              },
-                            );
-                          } else {
-                            showDialog(
-                              barrierColor: Colors.black26,
-                              context: context,
-                              builder: (context) {
-                                return const CustomAlertDialog(
-                                  title: "별점 평가를 먼저 해주세요.",
-                                  //description: "Custom Popup dialog Description.",
-                                );
-                              },
-                            );
-                          }
-                        },
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 30.0), //adds padding inside the button
-                        child: Text("호감 보내기"),
-                        color: Color(0xFF365859),
-                        textColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(30.0)),
-                      ),
+                      _sendFavoriteOrSeePhoneNumber(context, widget.matched),
                       RaisedButton(
                         onPressed: () {
                           showDialog(
@@ -163,38 +128,38 @@ class _TodaydetailState extends State<Todaydetail> {
               childAspectRatio: 4.0,
             ),
             delegate: SliverChildListDelegate([
-                Container(
-                  alignment: Alignment.center,
-                  color: Colors.white,
-                  child: Text(widget.genderModel.age.toString()),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  color: Colors.white,
-                  child: Text(widget.genderModel.height.toString()),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  color: Colors.white,
-                  child: Text(widget.genderModel.job ?? ""),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  color: Colors.white,
-                  child: Text(widget.genderModel.bodytype ?? ""),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  color: Colors.white,
-                  child: Text(widget.genderModel.religion ?? ""),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  color: Colors.white,
-                  child: Text(widget.genderModel.mbti ?? ""),
-                ),
-              ]),
-            ),
+              Container(
+                alignment: Alignment.center,
+                color: Colors.white,
+                child: Text(widget.genderModel.age.toString()),
+              ),
+              Container(
+                alignment: Alignment.center,
+                color: Colors.white,
+                child: Text(widget.genderModel.height.toString()),
+              ),
+              Container(
+                alignment: Alignment.center,
+                color: Colors.white,
+                child: Text(widget.genderModel.job ?? ""),
+              ),
+              Container(
+                alignment: Alignment.center,
+                color: Colors.white,
+                child: Text(widget.genderModel.bodytype ?? ""),
+              ),
+              Container(
+                alignment: Alignment.center,
+                color: Colors.white,
+                child: Text(widget.genderModel.religion ?? ""),
+              ),
+              Container(
+                alignment: Alignment.center,
+                color: Colors.white,
+                child: Text(widget.genderModel.mbti ?? ""),
+              ),
+            ]),
+          ),
 
           SliverList(
             delegate: SliverChildListDelegate([
@@ -290,44 +255,7 @@ class _TodaydetailState extends State<Todaydetail> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     SizedBox(height: 10),
-                    RaisedButton(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 30.0), //adds padding inside the button
-                      onPressed: () {
-                        if (update_rating > 0.0) {
-                          showDialog(
-                            barrierColor: Color(0xff365859).withOpacity(0.5),
-                            context: context,
-                            builder: (context) {
-                              return CustomLoveLetter(
-                                func: sendFavoriteMessage,
-                                genderModel: widget.genderModel,
-                                title:
-                                    "호감을 보내고(20코인) 상대방이 수락하면 바로 연락처를 알 수 있습니다.",
-                                hint: "설레는 마음을 담아 메세지를 작성해보아요 :)",
-                              );
-                            },
-                          );
-                        } else {
-                          showDialog(
-                            barrierColor: Colors.black26,
-                            context: context,
-                            builder: (context) {
-                              return const CustomAlertDialog(
-                                title: "별점 평가를 먼저 해주세요.",
-                              );
-                            },
-                          );
-                        }
-                      },
-                      elevation: 0,
-                      child: Text("호감 보내기"),
-                      color: Color(0xFF365859),
-                      textColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(30.0),
-                      ),
-                    ),
+                    _sendFavoriteOrSeePhoneNumber(context, widget.matched),
                     RaisedButton(
                       onPressed: () {},
                       elevation: 0,
@@ -398,6 +326,60 @@ class _TodaydetailState extends State<Todaydetail> {
               );
       }),
     );
+  }
+
+  RaisedButton _sendFavoriteOrSeePhoneNumber(
+      BuildContext context, bool matched) {
+    return matched == false
+        ? RaisedButton(
+            padding: EdgeInsets.symmetric(
+                horizontal: 30.0), //adds padding inside the button
+            onPressed: () {
+              if (update_rating > 0.0) {
+                showDialog(
+                  barrierColor: Color(0xff365859).withOpacity(0.5),
+                  context: context,
+                  builder: (context) {
+                    return CustomLoveLetter(
+                      func: sendFavoriteMessage,
+                      genderModel: widget.genderModel,
+                      title: "호감을 보내고(20코인) 상대방이 수락하면 바로 연락처를 알 수 있습니다.",
+                      hint: "설레는 마음을 담아 메세지를 작성해보아요 :)",
+                    );
+                  },
+                );
+              } else {
+                showDialog(
+                  barrierColor: Colors.black26,
+                  context: context,
+                  builder: (context) {
+                    return const CustomAlertDialog(
+                      title: "별점 평가를 먼저 해주세요.",
+                    );
+                  },
+                );
+              }
+            },
+            elevation: 0,
+            child: Text("호감 보내기"),
+            color: Color(0xFF365859),
+            textColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: new BorderRadius.circular(30.0),
+            ),
+          )
+        : RaisedButton(
+            padding: EdgeInsets.symmetric(
+                horizontal: 30.0), //adds padding inside the button
+            onPressed: () {},
+            elevation: 0,
+            child: Text("번호 보기"),
+            color: Color(0xFF0BE8B6),
+            textColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: new BorderRadius.circular(30.0),
+            ),
+          );
   }
 
   void sendFavoriteMessage(BuildContext context, String message) async {

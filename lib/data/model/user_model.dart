@@ -204,3 +204,38 @@ class UserModel extends Core with EquatableMixin {
     ];
   }
 }
+
+class CoinModel extends Core {
+  String uid;
+  int coins;
+  CoinModel({
+    required this.uid,
+    required this.coins,
+  }) : super(DateTime.now(), DateTime.now());
+
+  Map<String, dynamic> toJson() {
+    return {
+      'uid': uid,
+      'coins': coins,
+      'created_at': createdAt,
+      'updated_at': updatedAt,
+    };
+  }
+
+  factory CoinModel.fromFirebase(DocumentSnapshot documentSnapshot) {
+    Map<String, dynamic> json = documentSnapshot.data() as Map<String, dynamic>;
+
+    CoinModel coinModel = CoinModel(
+      uid: json['uid'] ?? '',
+      coins: json['coins']?.toInt() ?? 0,
+    );
+
+    coinModel.createdAt = (json['created_at'] as Timestamp).toDate();
+    coinModel.updatedAt = (json['updated_at'] as Timestamp).toDate();
+
+    return coinModel;
+  }
+
+  // String toJson() => json.encode(toMap());
+  // factory CoinModel.fromJson(String source) => CoinModel.fromMap(json.decode(source));
+}

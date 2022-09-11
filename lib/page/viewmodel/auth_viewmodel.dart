@@ -12,18 +12,13 @@ import 'package:salondec/core/define.dart';
 import 'package:salondec/core/viewState.dart';
 import 'package:salondec/data/model/gender_model.dart';
 import 'package:salondec/data/model/user_model.dart';
-import 'package:salondec/data/repositories/auth_repository_impl.dart';
 
 // enum ErrorState { network, fail, none }
 
 class AuthViewModel extends GetxController {
-  late AuthRepositoryImpl _authRepository;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   final FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
-  // AuthViewModel({required AuthRepositoryImpl authRepository}) {
-  //   _authRepository = authRepository;
-  // }
 
   //Firebase통해서 들어오는 유저 데이터
   final Rxn<User?> _user = Rxn(null);
@@ -44,6 +39,8 @@ class AuthViewModel extends GetxController {
   ViewState get discoveryViewState => _discoveryViewState.value!;
 
   Rxn<UserModel> userModel = Rxn();
+  Rx<CoinModel?> _userCoin = null.obs;
+  CoinModel get userCoin => _userCoin.value!;
 
   Rx<UploadState> _uploadState = UploadState.initial.obs;
   UploadState get uploadState => _uploadState.value;
@@ -97,6 +94,7 @@ class AuthViewModel extends GetxController {
     _currentUser();
     await getUserInfo();
     await getMainPageInfo(uid: user!.uid, gender: userModel.value!.gender);
+    await getMyCoins();
   }
 
   // sign up 은 우선 이메일, 비번으로 아디 만들고
@@ -220,10 +218,10 @@ class AuthViewModel extends GetxController {
           final firebaseStorageRef = _firebaseStorage
               .ref()
               .child('users')
-              .child('${DateTime.now().millisecondsSinceEpoch}.png');
+              .child('${DateTime.now().millisecondsSinceEpoch}.jpg');
           referenceMap[mapKey] = firebaseStorageRef;
           await firebaseStorageRef.putFile(
-              photoMap[mapKey]!, SettableMetadata(contentType: 'image/png'));
+              photoMap[mapKey]!, SettableMetadata(contentType: 'image/jpg'));
         }
       }
     } on FirebaseException catch (e) {
@@ -241,38 +239,6 @@ class AuthViewModel extends GetxController {
       downloadUrlMap[mapKey] = await referenceMap[mapKey]!.getDownloadURL();
     }
   }
-
-  // Future<void> updateImagesInfo(
-  //     {required Map<String, String> downloadUrlMap}) async {
-  //   try {
-  //     String genderCollection = _checkGender(_userModel.value!);
-  //     GenderModel genderModel = GenderModel(
-  //       uid: _userModel.value!.uid,
-  //       imgUrl1: downloadUrlMap['imgUrl1'],
-  //       imgUrl2: downloadUrlMap['imgUrl2'],
-  //       imgUrl3: downloadUrlMap['imgUrl3'],
-  //     );
-  //     UserModel userModel = UserModel(
-  //       uid: _userModel.value!.uid,
-  //       email: _userModel.value!.email,
-  //       gender: _userModel.value!.gender,
-  //       imgUrl1: downloadUrlMap['imgUrl1'],
-  //       imgUrl2: downloadUrlMap['imgUrl2'],
-  //       imgUrl3: downloadUrlMap['imgUrl3'],
-  //     );
-  //     await _firebaseFirestore
-  //         .collection(FireStoreCollection.userCollection)
-  //         .doc(userModel.uid)
-  //         .set(userModel.toUpdateJson());
-
-  //     await _firebaseFirestore
-  //         .collection(genderCollection)
-  //         .doc(genderModel.uid)
-  //         .set(genderModel.toUpdateJson());
-  //   } catch (e) {
-  //     _catchError(e);
-  //   }
-  // }
 
   Future<void> updateUserInfo({required UserModel userModelTemp}) async {
     // Future<void> updateUserInfo() async {
@@ -296,9 +262,6 @@ class AuthViewModel extends GetxController {
       character: userModelTemp.character,
       interest: userModelTemp.interest,
       profileImageUrl: downloadUrlMap['profileImageUrl'],
-      // imgUrl1: userModel.imgUrl1,
-      // imgUrl2: userModel.imgUrl2,
-      // imgUrl3: userModel.imgUrl3,
     );
     try {
       // UserModel userModel = userModel;
@@ -353,7 +316,7 @@ class AuthViewModel extends GetxController {
 
       if (documentSnapshot.data() != null) {
         UserModel tempModel = UserModel.fromFirebase(documentSnapshot);
-        _setModel(userModel, tempModel);
+        _setUserModel(userModel, tempModel);
         // userModel.value = tempModel;
         gender = userModel.value?.gender ?? "";
       }
@@ -408,6 +371,44 @@ class AuthViewModel extends GetxController {
     }
   }
 
+// 코인 갯수 체크
+  Future<void> getMyCoins() async {
+    // 현재 코인 컬렉션 없으면 만들어주고 잇으면 갯수 가져오기. 코인 컬렉션은 유저 아이디 안에.
+    // 받아오고 널 체크
+    try {
+      DocumentSnapshot documentSnapshot = await _firebaseFirestore
+          .collection(FireStoreCollection.userCollection)
+          .doc(_user.value!.uid)
+          .collection(FireStoreCollection.userCoinSubCollection)
+          .doc(_user.value!.uid)
+          .get();
+
+      if (documentSnapshot.data() == null) {
+        CoinModel coins = CoinModel(uid: userModel.value!.uid, coins: 0);
+        await _firebaseFirestore
+            .collection(FireStoreCollection.userCollection)
+            .doc(_user.value!.uid)
+            .collection(FireStoreCollection.userCoinSubCollection)
+            .doc(_user.value!.uid)
+            .set(coins.toJson());
+
+        documentSnapshot = await _firebaseFirestore
+            .collection(FireStoreCollection.userCollection)
+            .doc(_user.value!.uid)
+            .collection(FireStoreCollection.userCoinSubCollection)
+            .doc(_user.value!.uid)
+            .get();
+      }
+      if (documentSnapshot.data() != null) {
+        CoinModel coinModel = CoinModel.fromFirebase(documentSnapshot);
+        _userCoin = coinModel.obs;
+      }
+    } catch (e) {
+      _catchError(e);
+    }
+  }
+
+  // 안씀
   Future<void> setProfileImage(
       {required String uid, required File image}) async {
     try {
@@ -447,7 +448,7 @@ class AuthViewModel extends GetxController {
       ? FireStoreCollection.manCollection
       : FireStoreCollection.womanCollection;
 
-  void _setModel(Rxn<UserModel> userModel, UserModel model) =>
+  void _setUserModel(Rxn<UserModel> userModel, UserModel model) =>
       userModel.value = model;
   void _setState(Rxn<ViewState> state, ViewState nextState) =>
       state.value = nextState;

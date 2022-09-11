@@ -61,12 +61,12 @@ class TextchatScreen extends StatelessWidget {
                     itemCount: _chatList.length,
                     itemBuilder: (BuildContext context, int index) =>
                         GestureDetector(
-                            onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      TextchatDetail(_chatList[index]),
-                                )),
+                            // onTap: () => Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //       builder: (context) =>
+                            //           TextchatDetail(_chatList[index]),
+                            //     )),
                             child: Card(
                                 margin: EdgeInsets.fromLTRB(10, 5, 10, 5),
                                 elevation: 0.0,

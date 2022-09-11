@@ -70,8 +70,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           MaterialPageRoute(
                             builder: (context) =>
                                 // todaydetail(_noteList[index]),
-                                Todaydetail(
-                                    _authViewModel.genderModelList[index]),
+                                Todaydetail(false,
+                                    genderModel:
+                                        _authViewModel.genderModelList[index]),
                           ));
                     },
                     child: Card(
@@ -111,9 +112,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     child: Text(
                                         _eachText(index, "age") +
                                             ' | ' +
-                                        _eachText(index, "job") +
+                                            _eachText(index, "job") +
                                             ' | ' +
-                                        _eachText(index, "mbti"),
+                                            _eachText(index, "mbti"),
                                         style: const TextStyle(
                                             fontSize: 10.0,
                                             fontFamily: 'Gothic A1',
