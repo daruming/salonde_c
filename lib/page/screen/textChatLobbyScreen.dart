@@ -14,7 +14,7 @@ import 'package:timeago/timeago.dart' as timeago;
 
 class textChatLobbyScreen extends StatefulWidget {
   final String username;
-  textChatLobbyScreen({Key? key, required this.username}) : super(key: key);
+  const textChatLobbyScreen({Key? key, required this.username}) : super(key: key);
 
   @override
   _textChatLobbyScreenState createState() => _textChatLobbyScreenState();
@@ -81,7 +81,8 @@ class _textChatLobbyScreenState extends State<textChatLobbyScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(children: <Widget>[
+      backgroundColor: Color(0xffF4F4F4),
+      body: Column(children: <Widget>[
       Padding(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
         child: TabBar(
@@ -161,25 +162,25 @@ class _textChatLobbyScreenState extends State<textChatLobbyScreen>
                               trailing: Text(timeago.format(time2)),
                             )));
                   }),
-              Center(
+              const Center(
                 child: Text(
                   '연애게시판을 준비중입니다',
                   style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
                 ),
               ),
-              Center(
+              const Center(
                 child: Text(
                   '자랑게시판을 준비중입니다',
                   style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
                 ),
               ),
-              Center(
+              const Center(
                 child: Text(
                   '재태크게시판을 준비중입니다',
                   style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
                 ),
               ),
-              Center(
+              const Center(
                 child: Text(
                   '유머게시판을 준비중입니다',
                   style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),

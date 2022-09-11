@@ -47,12 +47,6 @@ class ChatScreenState extends State<ChatScreen>
       body: TabBarView(controller: _tabController, children: [
         textChatLobbyScreen(username: user.email!),
         VoiceChatLobbyScreen(username: user.email!),
-        // Voicechat_making_room(
-        //   channelName: "test",
-        // ),
-        // Voicechat_test(
-        //   channelName: "test",
-        // ),
       ]),
     );
   }
