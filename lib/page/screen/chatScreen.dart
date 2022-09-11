@@ -41,7 +41,7 @@ class ChatScreenState extends State<ChatScreen>
         controller: _tabController,
         labelColor: Colors.black,
         unselectedLabelColor: Color(0xffD2D2D2),
-        indicatorColor: Colors.transparent,
+        indicatorColor: Colors.black,
         tabs: salonTabs,
       ),
       body: TabBarView(controller: _tabController, children: [
