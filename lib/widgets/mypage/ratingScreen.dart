@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:salondec/page/viewmodel/auth_viewmodel.dart';
 import 'package:get/get.dart';
+import 'package:salondec/widgets/mypage/myPageScreen.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class RatingScreen extends StatefulWidget {
@@ -87,7 +88,7 @@ class _RatingScreenState extends State<RatingScreen> {
                               '' &&
                           _authViewModel.photoMap["profileImageUrl"] == null)
                       ? ClipRRect(
-                          borderRadius: BorderRadius.circular(50),
+                          borderRadius: BorderRadius.circular(20),
                           child: Image.network(
                             _authViewModel.userModel.value!.profileImageUrl!,
                             width: 100,
@@ -97,7 +98,7 @@ class _RatingScreenState extends State<RatingScreen> {
                         )
                       : _authViewModel.photoMap["profileImageUrl"] != null
                           ? ClipRRect(
-                              borderRadius: BorderRadius.circular(50),
+                              borderRadius: BorderRadius.circular(20),
                               child: Image.file(
                                 _authViewModel.photoMap["profileImageUrl"]!,
                                 width: 100,
@@ -107,7 +108,7 @@ class _RatingScreenState extends State<RatingScreen> {
                           : Container(
                               decoration: BoxDecoration(
                                   color: Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(50)),
+                                  borderRadius: BorderRadius.circular(20)),
                               width: 100,
                               height: 100,
                               child: Icon(
@@ -134,9 +135,7 @@ class _RatingScreenState extends State<RatingScreen> {
       body: ListView(
                 padding: EdgeInsets.all(30),
                 children: [
-                  Container(
-                    padding: EdgeInsets.fromLTRB(20, 20, 0, 0),
-                    child: Row(
+                  Row(
                     children: [
                       SizedBox(
                         height: 200,
@@ -240,20 +239,33 @@ class _RatingScreenState extends State<RatingScreen> {
                           )
                         )
                       ),  
-                    ]
-                  )
+                    ],
                   ),
-                  SizedBox(height: 40,),
-                  
-                  ElevatedButton(
-                      
-                      style: ElevatedButton.styleFrom(
-                        primary: Color(0xff365859),
-                        minimumSize: Size.fromHeight(50),
-                      ),
-                      child: Text('새로 측정하기'),
-                      onPressed: () {
-                      }),
+                  SizedBox(height: 30,),
+                  ListTile(
+                    title: Center(child: Text('돌아가기')),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      side: BorderSide(color:  Colors.grey,),
+                    ),
+                    onTap: () {
+                      Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => MyPageScreen()));
+                    }
+                  ),
+                  SizedBox(height: 5,),
+                  ListTile(
+                    title: Center(child: Text('새로 측정하기', style: TextStyle(color: Colors.white))),
+                    tileColor: Color(0xff365859),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      side: BorderSide(color:  Colors.grey,),
+                    ),
+                    onTap: () {
+                      Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => MyPageScreen()));
+                    }
+                  ),
                 ]
               ),
     );

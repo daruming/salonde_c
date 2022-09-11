@@ -110,7 +110,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                               '' &&
                           _authViewModel.photoMap["profileImageUrl"] == null)
                       ? ClipRRect(
-                          borderRadius: BorderRadius.circular(50),
+                          borderRadius: BorderRadius.circular(20),
                           child: Image.network(
                             _authViewModel.userModel.value!.profileImageUrl!,
                             width: 100,
@@ -120,7 +120,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                         )
                       : _authViewModel.photoMap["profileImageUrl"] != null
                           ? ClipRRect(
-                              borderRadius: BorderRadius.circular(50),
+                              borderRadius: BorderRadius.circular(20),
                               child: Image.file(
                                 _authViewModel.photoMap["profileImageUrl"]!,
                                 width: 100,
@@ -130,7 +130,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                           : Container(
                               decoration: BoxDecoration(
                                   color: Colors.grey[200],
-                                  borderRadius: BorderRadius.circular(50)),
+                                  borderRadius: BorderRadius.circular(20)),
                               width: 100,
                               height: 100,
                               child: Icon(
@@ -185,16 +185,15 @@ class _MyPageScreenState extends State<MyPageScreen> {
                     onTap: () {
                     }
                     ),
-                    ElevatedButton(
-                      
-                      style: ElevatedButton.styleFrom(
-                        primary: Color(0xff365859),
-                        minimumSize: Size.fromHeight(50),
-                      ),
-                      child: Text('로그아웃'),
-                      onPressed: () {
-                        _handleLogoutUser();
-                      }),
+                    ListTile(
+                    title: Center(child: Text('로그아웃', style: TextStyle(color: Colors.white))),
+                    tileColor: Color(0xff365859),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      side: BorderSide(color:  Colors.grey,),
+                    ),
+                    onTap: () { _handleLogoutUser();}
+                  ),
                 ]
               )
             ),
