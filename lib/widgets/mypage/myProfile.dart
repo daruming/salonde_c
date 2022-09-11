@@ -723,9 +723,9 @@ class _MyProfileScreenState extends State<MyProfileScreen>
                 innerText: '저장하기',
                 onPressed: () {
                   if (_authViewModel.userModel.value != null &&
-                      _authViewModel.userModel.value?.profileImageUrl != null &&
-                      _authViewModel.userModel.value?.profileImageUrl != '' &&
-                      _authViewModel.photoMap["profileImageUrl"] == null) {
+                      // _authViewModel.userModel.value?.profileImageUrl != null &&
+                      // _authViewModel.userModel.value?.profileImageUrl != '' &&
+                      _authViewModel.photoMap["profileImageUrl"] != null) {
                     uploadFile(context);
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text("저장중입니다. 잠시만 기다려주세요!")),

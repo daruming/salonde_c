@@ -335,7 +335,8 @@ class _TodaydetailState extends State<Todaydetail> {
             padding: EdgeInsets.symmetric(
                 horizontal: 30.0), //adds padding inside the button
             onPressed: () {
-              if (update_rating > 0.0) {
+              // if (update_rating > 0.0) {
+              if ((_ratingViewModel.targetDetail.value?.rating ?? 0.0) > 0.0) {
                 showDialog(
                   barrierColor: Color(0xff365859).withOpacity(0.5),
                   context: context,

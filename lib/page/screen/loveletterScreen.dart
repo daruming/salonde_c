@@ -110,12 +110,16 @@ class _LoveletternewScreenState extends State<LoveletternewScreen> {
                                                       .profileImageUrl !=
                                                   "")
                                           ? Container(
+                                              width: 40,
                                               child: Image.network(
                                                   _ratingViewModel
                                                       .myGetFavoritePersons[
                                                           index]
                                                       .profileImageUrl!))
-                                          : Container(),
+                                          : Container(
+                                              width: 40,
+                                              child: Text("없음"),
+                                            ),
                                   title: Padding(
                                       padding:
                                           EdgeInsets.fromLTRB(0, 15, 0, 10),
