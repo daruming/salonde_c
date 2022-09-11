@@ -42,12 +42,13 @@ class _TextchatDetailState extends State<TextchatDetail> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-          iconTheme: IconThemeData(
-              color: Colors.white, //change your color here
-            ),
-          backgroundColor: Color(0xff365859),
-          foregroundColor: Colors.white,
-          title: Text("문자살롱",style: TextStyle(fontSize: 20.0, color: Colors.white)),
+        iconTheme: IconThemeData(
+          color: Colors.white, //change your color here
+        ),
+        backgroundColor: Color(0xff365859),
+        foregroundColor: Colors.white,
+        title:
+            Text("문자살롱", style: TextStyle(fontSize: 20.0, color: Colors.white)),
       ),
       body:
           // Obx(() {
@@ -144,6 +145,7 @@ class _TextchatDetailState extends State<TextchatDetail> {
         contents: _replyFieldController.text,
       );
       await _textChatViewModel.getChatCommentList(widget.model.docId);
+      await _textChatViewModel.getTextChatList();
       _replyFieldController.clear();
     } else {
       //alert

@@ -24,16 +24,18 @@ class TextChatModel extends Core with EquatableMixin {
 
   Map<String, dynamic> toJson({TextChatModel? textChatModel}) {
     if (textChatModel != null) {
-      return {
+      var json = {
         'uid': uid,
         'docId': docId,
         'name': (name == null || name == '') ? textChatModel.name : name,
         'title': (title == '') ? textChatModel.title : title,
         'contents': (contents == '') ? textChatModel.contents : contents,
-        'commentCount': textChatModel.commentCount,
+        'commentCount':
+            (commentCount == 0) ? textChatModel.commentCount : commentCount,
         'created_at': textChatModel.createdAt,
         'updated_at': updatedAt,
       };
+      return json;
     }
     return {
       'uid': uid,

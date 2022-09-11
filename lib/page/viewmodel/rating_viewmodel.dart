@@ -578,7 +578,7 @@ class RatingViewModel extends GetxController {
       String genderCollection = _checkGender(user);
       for (var model in genderList) {
         if (model.uid == targetUid) {
-          var tempInt = (model.ratedPersonsLength ?? 0) + 1;
+          var tempInt = (model.ratedPersonsLength ?? 0);
           field['ratedPersonsLength'] = tempInt;
           field['rating'] = model.rating! + rating;
           await _firebaseFirestore
