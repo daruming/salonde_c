@@ -3,11 +3,9 @@ import 'package:salondec/page/viewmodel/auth_viewmodel.dart';
 import 'package:get/get.dart';
 import 'today_detail.dart';
 
-
 class MatchingScreen extends StatelessWidget {
   MatchingScreen({Key? key}) : super(key: key);
   AuthViewModel _authViewModel = Get.find<AuthViewModel>();
-
 
   @override
   Widget build(BuildContext context) {
@@ -26,61 +24,58 @@ class MatchingScreen extends StatelessWidget {
           itemBuilder: (BuildContext context, int index) => GestureDetector(
             onTap: () {
               Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Todaydetail(_authViewModel.genderModelList[index]),
-                )
-              );
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        Todaydetail(_authViewModel.genderModelList[index]),
+                  ));
             },
             child: Card(
-                      shadowColor: Colors.transparent,
-                      child: Stack(
-                          alignment: FractionalOffset.bottomCenter,
-                          children: <Widget>[
-                            Container(
-                                decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        image: NetworkImage(
-                                          // doc['userPhotoUrl'],
-                                          _authViewModel.genderModelList[index]
-                                              .profileImageUrl!,
-                                        ),
-                                        fit: BoxFit.fitHeight))),
-                            Container(
-                              color: Colors.white,
-                              alignment: Alignment.center,
-                              height: 40.0,
-                              child: Row(children: <Widget>[
-                                Expanded(
-                                    child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            10, 0, 0, 0),
-                                        // child: Text(doc['title'],
-                                        child: Text(
-                                            _authViewModel
-                                                    .genderModelList[index]
-                                                    .name ??
-                                                "",
-                                            style: const TextStyle(
-                                                fontSize: 16.0,
-                                                fontFamily: 'Gothic A1',
-                                                fontWeight: FontWeight.w600)))),
-                                Expanded(
-                                    child: Text(
-                                        _eachText(index, "age") +
-                                            ' | ' +
-                                        _eachText(index, "job") +
-                                            ' | ' +
-                                        _eachText(index, "mbti"),
-                                        style: const TextStyle(
-                                            fontSize: 10.0,
-                                            fontFamily: 'Gothic A1',
-                                            fontWeight: FontWeight.w400))),
-                              ]),
-                            ),
-                          ]),
+              shadowColor: Colors.transparent,
+              child: Stack(
+                  alignment: FractionalOffset.bottomCenter,
+                  children: <Widget>[
+                    Container(
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: NetworkImage(
+                                  // doc['userPhotoUrl'],
+                                  _authViewModel
+                                      .genderModelList[index].profileImageUrl!,
+                                ),
+                                fit: BoxFit.fitHeight))),
+                    Container(
+                      color: Colors.white,
+                      alignment: Alignment.center,
+                      height: 40.0,
+                      child: Row(children: <Widget>[
+                        Expanded(
+                            child: Padding(
+                                padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                // child: Text(doc['title'],
+                                child: Text(
+                                    _authViewModel
+                                            .genderModelList[index].name ??
+                                        "",
+                                    style: const TextStyle(
+                                        fontSize: 16.0,
+                                        fontFamily: 'Gothic A1',
+                                        fontWeight: FontWeight.w600)))),
+                        Expanded(
+                            child: Text(
+                                _eachText(index, "age") +
+                                    ' | ' +
+                                    _eachText(index, "job") +
+                                    ' | ' +
+                                    _eachText(index, "mbti"),
+                                style: const TextStyle(
+                                    fontSize: 10.0,
+                                    fontFamily: 'Gothic A1',
+                                    fontWeight: FontWeight.w400))),
+                      ]),
                     ),
-
+                  ]),
+            ),
           ),
         ),
       ),

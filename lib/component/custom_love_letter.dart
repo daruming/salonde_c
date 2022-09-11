@@ -1,16 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:salondec/component/custom_alert_dialog.dart';
+import 'package:salondec/data/model/gender_model.dart';
+import 'package:salondec/page/viewmodel/auth_viewmodel.dart';
+import 'package:salondec/page/viewmodel/rating_viewmodel.dart';
 
 class CustomLoveLetter extends StatefulWidget {
-  const CustomLoveLetter({Key? key, required this.title, required this.hint})
-      : super(key: key);
-
+  CustomLoveLetter({
+    Key? key,
+    required this.func,
+    required this.title,
+    required this.hint,
+    required this.genderModel,
+  }) : super(key: key);
+  final Function func;
   final String title, hint;
+  final GenderModel genderModel;
 
   @override
   _CustomLoveLetterState createState() => _CustomLoveLetterState();
 }
 
 class _CustomLoveLetterState extends State<CustomLoveLetter> {
+  final TextEditingController _textEditingController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -39,6 +52,7 @@ class _CustomLoveLetterState extends State<CustomLoveLetter> {
           Container(
             padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
             child: TextField(
+              controller: _textEditingController,
               decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: "${widget.hint}",
@@ -66,7 +80,7 @@ class _CustomLoveLetterState extends State<CustomLoveLetter> {
                       borderRadius: new BorderRadius.circular(30.0)),
                   onPressed: () {
                     setState(() {
-                      Navigator.pop(context);
+                      widget.func(context, _textEditingController.text);
                     });
                   },
                 ),

@@ -12,8 +12,8 @@ import 'package:salondec/page/viewmodel/rating_viewmodel.dart';
 import 'package:salondec/page/widgets/main_drawer.dart';
 
 import 'package:salondec/page/viewmodel/auth_viewmodel.dart';
-
-import '../menu/myPageScreen.dart';
+import 'package:salondec/page/widgets/progress_widget.dart';
+import 'package:salondec/widgets/mypage/myPageScreen.dart';
 
 String title_string = "Home";
 
@@ -89,25 +89,18 @@ class _MainPageState extends State<MainPage> {
               ),
               onPressed: () {
                 Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => MyPageScreen()));
+                    MaterialPageRoute(builder: (context) => MyPageScreen()));
               },
             )
           ],
         ),
         drawer: MainDrawer(),
-        
         body: Obx(() {
           Size size = MediaQuery.of(context).size;
           if (_authViewModel.homeViewState is Loaded) {
             return pageList[pageIndex];
           }
-          return Center(
-            child: Container(
-              height: 50,
-              width: 50,
-              child: const CircularProgressIndicator(color: Colors.amber),
-            ),
-          );
+          return ProgressWidget();
         }),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: pageIndex,

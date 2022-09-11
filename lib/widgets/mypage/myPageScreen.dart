@@ -4,6 +4,8 @@ import 'package:salondec/page/viewmodel/auth_viewmodel.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'package:salondec/data/model/user_model.dart';
+
 const double _kItemExtent = 32.0;
 
 const title = 'Floating App Bar';
@@ -22,6 +24,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
     super.initState();
   }
   
+
   
   @override
   Widget build(BuildContext context) {
@@ -54,17 +57,16 @@ class _MyPageScreenState extends State<MyPageScreen> {
                 children: <Widget>[
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const <Widget>[
+                    children: <Widget>[
                       Text(
-                        "4.87", 
+                        _authViewModel.userModel.value?.rating.toString() ?? "", 
                         style: TextStyle(
                           color: Color(0xff365859),
                           fontSize: 35,
                           fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Text(
-                          '남살롱, 30세', 
+                        Text(_authViewModel.userModel.value?.name ?? "",
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 14,
