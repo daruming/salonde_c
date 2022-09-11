@@ -96,7 +96,9 @@ class _MyPageScreenState extends State<MyPageScreen> {
                         ],
                       ),
                   ]
-            ),)),
+                )
+              )
+            ),
             background: Stack(
               fit: StackFit.expand,
               children: [
