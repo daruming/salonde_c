@@ -60,10 +60,14 @@ class _Textchat_making_roomState extends State<Textchat_making_room> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
+          iconTheme: IconThemeData(
+              color: Colors.white, //change your color here
+            ),
           // Here we take the value from the MyHomePage object that was created by
           // the App.build method, and use it to set our appbar title.
           backgroundColor: Color(0xff365859),
-          title: Text("글쓰기"),
+          foregroundColor: Colors.white,
+          title: Text("글쓰기",style: TextStyle(fontSize: 20.0, color: Colors.white)),
         ),
         body: SingleChildScrollView(child: Center(
           child: Obx(() {
