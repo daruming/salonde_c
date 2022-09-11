@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:salondec/core/viewState.dart';
+import 'package:salondec/data/model/gender_model.dart';
 import 'package:salondec/page/viewmodel/auth_viewmodel.dart';
 import 'package:get/get.dart';
 import 'package:salondec/page/viewmodel/rating_viewmodel.dart';
@@ -284,8 +285,12 @@ class _RatingScreenState extends State<RatingScreen> {
   }
 
   void getRatedPersons() async {
+    await _authViewModel.geMyGenderListForReRate();
+    GenderModel genderModel = _ratingViewModel.getGenderModel(
+        _authViewModel.myGenderModelListForReRate,
+        _authViewModel.userModel.value!.uid);
     await _ratingViewModel.requestRerating(
-        uid: _authViewModel.userModel.value!.uid);
+        userModel: _authViewModel.userModel.value!, genderModel: genderModel);
 
     await _ratingViewModel.getRatedPersons(
         uid: _authViewModel.userModel.value!.uid);

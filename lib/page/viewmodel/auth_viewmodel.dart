@@ -67,6 +67,9 @@ class AuthViewModel extends GetxController {
   Map<String, Reference> referenceMap = {};
   RxList<GenderModel> genderModelList = <GenderModel>[].obs;
   RxList<GenderModel> genderModelListUnderFivePeople = <GenderModel>[].obs;
+  RxList<GenderModel> myGenderModelListForReRate = <GenderModel>[].obs;
+  RxList<GenderModel> myGenderModelListUnderFivePeopleForReRate =
+      <GenderModel>[].obs;
   // RxList<UserModel> userModelListUnderFivePeople = <UserModel>[].obs;
   Rxn<UserModel> userModelUnderFivePeople = Rxn(null);
 
@@ -398,6 +401,46 @@ class AuthViewModel extends GetxController {
     }
   }
 
+  Future<void> geMyGenderListForReRate() async {
+    List<GenderModel> tempList = [];
+    try {
+      var genderCollection = _checkSelfGender(userModel.value!);
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await _firebaseFirestore.collection(genderCollection).get();
+
+      var temp =
+          querySnapshot.docs.map((e) => GenderModel.fromFirebase(e)).toList();
+      if (temp.isNotEmpty) {
+        for (var e in temp) {
+          // if (e.imgUrl1 != null && e.imgUrl1 != '') {
+          if (checkImgUrlNum(genderModel: e) > 1) {
+            // genderModelList.add(e);
+            tempList.add(e);
+          }
+        }
+        if (myGenderModelListForReRate.isNotEmpty) {
+          for (var model in tempList) {
+            if (!myGenderModelListForReRate.contains(model)) {
+              myGenderModelListForReRate.add(model);
+              if (model.ratedPersonsLength! < 21) {
+                // myGenderModelListUnderFivePeopleForReRate.add(model); // 필요없을듯
+              }
+            }
+          }
+        } else {
+          myGenderModelListForReRate.addAll(tempList);
+          for (var model in tempList) {
+            if (model.ratedPersonsLength! < 21) {
+              // myGenderModelListUnderFivePeopleForReRate.add(model);
+            }
+          }
+        }
+      }
+    } catch (e) {
+      _catchError(e);
+    }
+  }
+
   Future<void> getMainPageInfo(
       {required String uid, required String gender}) async {
     String genderCollection = _checkGender(userModel.value!);
@@ -422,7 +465,7 @@ class AuthViewModel extends GetxController {
           for (var model in tempList) {
             if (!genderModelList.contains(model)) {
               genderModelList.add(model);
-              if (model.ratedPersonsLength! < 5) {
+              if (model.ratedPersonsLength! < 21) {
                 genderModelListUnderFivePeople.add(model);
               }
             }
@@ -430,7 +473,7 @@ class AuthViewModel extends GetxController {
         } else {
           genderModelList.addAll(tempList);
           for (var model in tempList) {
-            if (model.ratedPersonsLength! < 5) {
+            if (model.ratedPersonsLength! < 21) {
               genderModelListUnderFivePeople.add(model);
             }
           }

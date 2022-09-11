@@ -54,7 +54,8 @@ class _LoginScreenState extends State<LoginScreen> {
               if (viewState is Loaded) {
                 return MainPage();
               }
-              return MyProfileScreen();
+              return MainPage();
+              // return MyProfileScreen();
             });
           } else {
             return Obx(() {

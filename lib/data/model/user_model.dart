@@ -67,11 +67,10 @@ class UserModel extends Core with EquatableMixin {
         'name': (name == null || name == '') ? userModel.name : name,
         'age': (age == null || age == 0) ? userModel.age : age,
         'height': (height == null || height == 0) ? userModel.height : height,
-        'ratedPersonsLength':
-            (ratedPersonsLength == null || ratedPersonsLength == 0)
-                ? userModel.ratedPersonsLength
-                : (ratedPersonsLength! + 1),
-        'rating': (rating == null || rating == 0) ? userModel.rating : rating,
+        'ratedPersonsLength': (ratedPersonsLength == null)
+            ? userModel.ratedPersonsLength
+            : (ratedPersonsLength!),
+        'rating': (rating == null) ? userModel.rating : rating,
         'job': (job == null || job == '') ? userModel.job : job,
         'religion': (religion == null || religion == '')
             ? userModel.religion

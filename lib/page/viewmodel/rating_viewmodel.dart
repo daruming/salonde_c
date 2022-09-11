@@ -84,16 +84,25 @@ class RatingViewModel extends GetxController {
     _errorState = ErrorState.none;
   }
 
+  getGenderModel(List<GenderModel> genderList, uid) {
+    for (var model in genderList) {
+      if (model.uid == uid) {
+        return model;
+      }
+    }
+  }
+
   // 재심사
   // 우선 재심사할 대상의 rated_persons 에 아이디들을 받아와서 all_users에서 해당 uid에서 내 uid 문서 지우기
   // 마지막으로 내 rated_persons 날리기
-  Future<void> requestRerating({required String uid}) async {
+  Future<void> requestRerating(
+      {required UserModel userModel, required GenderModel genderModel}) async {
     List<RatedModel> tempList = [];
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
           await _firebaseFirestore
               .collection(FireStoreCollection.userCollection)
-              .doc(uid)
+              .doc(userModel.uid)
               .collection(FireStoreCollection.userRatedMeSubCollection)
               .get();
       var temp =
@@ -109,16 +118,32 @@ class RatingViewModel extends GetxController {
               .collection(FireStoreCollection.userCollection)
               .doc(model.uid)
               .collection(FireStoreCollection.userRatingSubCollection)
-              .doc(uid)
+              .doc(userModel.uid)
               .delete();
           await _firebaseFirestore
               .collection(FireStoreCollection.userCollection)
-              .doc(uid)
+              .doc(userModel.uid)
               .collection(FireStoreCollection.userRatedMeSubCollection)
               .doc(model.uid)
               .delete();
         }
       }
+      var genderCollection = _checkSelfGender(userModel);
+      UserModel tempUserModel = userModel.copyWith();
+      tempUserModel.ratedPersonsLength = 0;
+      tempUserModel.rating = 0.0;
+      await _firebaseFirestore
+          .collection(FireStoreCollection.userCollection)
+          .doc(userModel.uid)
+          .update(tempUserModel.toJson(userModel: userModel));
+
+      GenderModel tempGenderModel = genderModel.copyWith();
+      tempGenderModel.ratedPersonsLength = 0;
+      tempGenderModel.rating = 0.0;
+      await _firebaseFirestore
+          .collection(genderCollection)
+          .doc(userModel.uid)
+          .update(tempGenderModel.toJson(userModel: userModel));
     } on FirebaseException catch (e) {
       if (e.code == "network-request-failed") {
         _errorState = ErrorState.network;
@@ -639,4 +664,8 @@ class RatingViewModel extends GetxController {
   String _checkGender(UserModel userModel) => userModel.gender == "남"
       ? FireStoreCollection.womanCollection
       : FireStoreCollection.manCollection;
+
+  String _checkSelfGender(UserModel userModel) => userModel.gender == "남"
+      ? FireStoreCollection.manCollection
+      : FireStoreCollection.womanCollection;
 }

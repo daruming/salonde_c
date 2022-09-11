@@ -51,12 +51,11 @@ class GenderModel extends Equatable {
         'uid': uid,
         'age': (age == null || age == 0) ? userModel.age : age,
         'height': (height == null || height == 0) ? userModel.height : height,
-        'ratedPersonsLength':
-            (ratedPersonsLength == null || ratedPersonsLength == 0)
-                // ? userModel.ratedPersonsLength
-                ? 1
-                : (ratedPersonsLength! + 1),
-        'rating': (rating == null || rating == 0) ? userModel.rating : rating,
+        'ratedPersonsLength': (ratedPersonsLength == null)
+            // ? userModel.ratedPersonsLength
+            ? 1
+            : (ratedPersonsLength!),
+        'rating': (rating == null) ? userModel.rating : rating,
         'imgUrl1':
             (imgUrl1 == null || imgUrl1 == '') ? userModel.imgUrl1 : imgUrl1,
         'imgUrl2':
@@ -175,5 +174,45 @@ class GenderModel extends Equatable {
       interest ?? "",
       profileImageUrl ?? "",
     ];
+  }
+
+  GenderModel copyWith({
+    String? uid,
+    int? age,
+    int? height,
+    int? ratedPersonsLength,
+    double? rating,
+    String? imgUrl1,
+    String? imgUrl2,
+    String? imgUrl3,
+    String? name,
+    String? job,
+    String? religion,
+    String? mbti,
+    String? bodytype,
+    String? introduction,
+    String? character,
+    String? interest,
+    String? profileImageUrl,
+  }) {
+    return GenderModel(
+      uid: uid ?? this.uid,
+      age: age ?? this.age,
+      height: height ?? this.height,
+      ratedPersonsLength: ratedPersonsLength ?? this.ratedPersonsLength,
+      rating: rating ?? this.rating,
+      imgUrl1: imgUrl1 ?? this.imgUrl1,
+      imgUrl2: imgUrl2 ?? this.imgUrl2,
+      imgUrl3: imgUrl3 ?? this.imgUrl3,
+      name: name ?? this.name,
+      job: job ?? this.job,
+      religion: religion ?? this.religion,
+      mbti: mbti ?? this.mbti,
+      bodytype: bodytype ?? this.bodytype,
+      introduction: introduction ?? this.introduction,
+      character: character ?? this.character,
+      interest: interest ?? this.interest,
+      profileImageUrl: profileImageUrl ?? this.profileImageUrl,
+    );
   }
 }

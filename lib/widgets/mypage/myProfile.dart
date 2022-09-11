@@ -149,7 +149,8 @@ class _MyProfileScreenState extends State<MyProfileScreen>
   Future uploadFile(BuildContext context) async {
     var userModel = _makeTempUserModel();
     await _authViewModel.upLoadFiles(userModel);
-    if (_authViewModel.loginScreenViewState is Empty) {
+    if (_authViewModel.loginScreenViewState is Empty &&
+        checkUserModel() == false) {
       Navigator.pop(context);
     }
     print("완료");
@@ -804,7 +805,8 @@ class _MyProfileScreenState extends State<MyProfileScreen>
                       _authViewModel
                           .userValueCheckInProfile(_makeTempUserModel());
                       //     _authViewModel.photoMap["profileImageUrl"] != null) {
-                      if (!_authViewModel.profileDataNullCheck) {
+                      if (!_authViewModel.profileDataNullCheck ||
+                          checkUserModel()) {
                         uploadFile(context);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text("저장중입니다. 잠시만 기다려주세요!")),
@@ -832,6 +834,14 @@ class _MyProfileScreenState extends State<MyProfileScreen>
             }));
       }),
     );
+  }
+
+  bool checkUserModel() {
+    if (_authViewModel.userModel.value!.profileImageUrl != null &&
+        _authViewModel.userModel.value!.imgUrl1 != null) {
+      return true;
+    }
+    return false;
   }
 
   Future _handleLogoutUser() async {
