@@ -58,6 +58,7 @@ class _Textchat_making_roomState extends State<Textchat_making_room> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Color(0xffF4F4F4),
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           iconTheme: IconThemeData(
