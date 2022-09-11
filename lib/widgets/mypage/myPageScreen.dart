@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'myProfile.dart';
 import 'package:salondec/page/viewmodel/auth_viewmodel.dart';
 import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 const double _kItemExtent = 32.0;
 
@@ -28,7 +29,8 @@ class _MyPageScreenState extends State<MyPageScreen> {
     final mediaQuery = MediaQuery.of(context);
     double height = mediaQuery.size.height*0.7;
   
-    return Scaffold(  
+    return Scaffold(
+       resizeToAvoidBottomInset: false,
         body: CustomScrollView(
           slivers: <Widget>[
             // Add the app bar to the CustomScrollView.
@@ -131,13 +133,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                                 color: Colors.grey[800],
                               ),
                             ),
-                ),
-                
-                /*Image.asset(
-                  "assets/image/image8.png",
-                  fit: BoxFit.cover,
-                  ),*/
-                  const DecoratedBox(
+                ),const DecoratedBox(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment(0.0, 0.5),
@@ -182,6 +178,16 @@ class _MyPageScreenState extends State<MyPageScreen> {
                     onTap: () {
                     }
                     ),
+                    ElevatedButton(
+                      
+                      style: ElevatedButton.styleFrom(
+                        primary: Color(0xff365859),
+                        minimumSize: Size.fromHeight(50),
+                      ),
+                      child: Text('로그아웃'),
+                      onPressed: () {
+                        _handleLogoutUser();
+                      }),
                 ]
               )
             ),
@@ -189,6 +195,25 @@ class _MyPageScreenState extends State<MyPageScreen> {
         ),
     );
   }
+  Future _handleLogoutUser() async {
+    try {
+      // await FirebaseAuth.instance.signOut();
+      _authViewModel.signOut();
+      if (_authViewModel.user == null) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('로그아웃 되었습니다.')),
+          );
+        }
+      }
+      Navigator.of(context).popUntil((route) => route.isFirst);
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
+      );
+    }
+  }
+
 }
   
   
