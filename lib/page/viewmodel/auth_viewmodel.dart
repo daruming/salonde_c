@@ -41,6 +41,9 @@ class AuthViewModel extends GetxController {
   final Rxn<ViewState> _discoveryViewState = Rxn(Initial());
   ViewState get discoveryViewState => _discoveryViewState.value!;
 
+  final Rxn<ViewState> _profileViewState = Rxn(Initial());
+  ViewState get profileViewState => _profileViewState.value!;
+
   Rxn<UserModel> userModel = Rxn();
   Rx<CoinModel?> _userCoin = null.obs;
   CoinModel get userCoin => _userCoin.value!;
@@ -375,6 +378,8 @@ class AuthViewModel extends GetxController {
       // required String uid,
       ) async {
     try {
+      _setState(_profileViewState, Loading());
+
       DocumentSnapshot documentSnapshot = await _firebaseFirestore
           .collection(FireStoreCollection.userCollection)
           .doc(_user.value!.uid)
@@ -386,6 +391,7 @@ class AuthViewModel extends GetxController {
         // userModel.value = tempModel;
         gender = userModel.value?.gender ?? "";
         userValueCheck();
+        _setState(_profileViewState, Loaded());
       }
     } catch (e) {
       _catchError(e);
