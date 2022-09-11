@@ -796,35 +796,46 @@ class _MyProfileScreenState extends State<MyProfileScreen>
                   if (state == UploadState.loading) {
                     return ProgressWidget();
                   }
-                  return CustomFormButton(
-                    innerText: '저장하기',
-                    onPressed: () {
-                      // if (_authViewModel.userModel.value != null &&
-                      //     // _authViewModel.userModel.value?.profileImageUrl != null &&
-                      //     // _authViewModel.userModel.value?.profileImageUrl != '' &&
-                      _authViewModel
-                          .userValueCheckInProfile(_makeTempUserModel());
-                      //     _authViewModel.photoMap["profileImageUrl"] != null) {
-                      if (!_authViewModel.profileDataNullCheck ||
-                          checkUserModel()) {
-                        uploadFile(context);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("저장중입니다. 잠시만 기다려주세요!")),
-                        );
-                      } else {
-                        showDialog(
-                          barrierColor: Colors.black26,
-                          context: context,
-                          builder: (context) {
-                            return const CustomAlertDialog(
-                              title: "개인정보를 입력해주세요",
-                              // title: "상단의 대표사진을 넣어주세요",
-                              //description: "Custom Popup dialog Description.",
+                  return Column(
+                    children: <Widget>[
+                      CustomFormButton(
+                        innerText: '저장하기',
+                        onPressed: () {
+                          // if (_authViewModel.userModel.value != null &&
+                          //     // _authViewModel.userModel.value?.profileImageUrl != null &&
+                          //     // _authViewModel.userModel.value?.profileImageUrl != '' &&
+                          _authViewModel
+                              .userValueCheckInProfile(_makeTempUserModel());
+                          //     _authViewModel.photoMap["profileImageUrl"] != null) {
+                          if (!_authViewModel.profileDataNullCheck ||
+                              checkUserModel()) {
+                            uploadFile(context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("저장중입니다. 잠시만 기다려주세요!")),
                             );
-                          },
-                        );
-                      }
-                    },
+                          } else {
+                            showDialog(
+                              barrierColor: Colors.black26,
+                              context: context,
+                              builder: (context) {
+                                return const CustomAlertDialog(
+                                  title: "개인정보를 입력해주세요",
+                                  // title: "상단의 대표사진을 넣어주세요",
+                                  //description: "Custom Popup dialog Description.",
+                                );
+                              },
+                            );
+                          }
+                        },
+                      ),
+                      SizedBox(height: 15),
+                      CustomFormButton(
+                        innerText: '로그아웃',
+                        onPressed: () {
+                          _authViewModel.signOut();
+                        },
+                      ),
+                    ],
                   );
                 }),
                 SizedBox(
