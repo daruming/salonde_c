@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:salondec/widgets/mypage/ratingScreen.dart';
 import 'myProfile.dart';
 import 'package:salondec/page/viewmodel/auth_viewmodel.dart';
 import 'package:get/get.dart';
@@ -166,6 +167,8 @@ class _MyPageScreenState extends State<MyPageScreen> {
                     )),
                     title: const Text('재심사받기'),
                     onTap: () {
+                      Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => RatingScreen()));
                     }
                     ),
                     ListTile(
