@@ -60,7 +60,7 @@ class UserModel extends Core with EquatableMixin {
   // }
   Map<String, dynamic> toJson({UserModel? userModel}) {
     if (userModel != null) {
-      return {
+      var json = {
         'id': uid,
         'email': email,
         'gender': gender,
@@ -100,8 +100,9 @@ class UserModel extends Core with EquatableMixin {
         'created_at': userModel.createdAt,
         'updated_at': updatedAt,
       };
+      return json;
     }
-    return {
+    var json = {
       'id': uid,
       'email': email,
       'gender': gender,
@@ -124,6 +125,7 @@ class UserModel extends Core with EquatableMixin {
       'created_at': createdAt,
       'updated_at': updatedAt,
     };
+    return json;
   }
 
   // Map<String, Object?> toUpdateJson() {

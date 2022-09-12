@@ -387,9 +387,9 @@ class RatingViewModel extends GetxController {
   }
 
   FavoriteModel? _over3daysFavoriteUser(FavoriteModel model, DateTime today) {
-    if (model.createdAt!.year - today.year > 0 ||
-        model.createdAt!.month - today.month > 0 ||
-        model.createdAt!.day - today.day > 3) {
+    if (today.year - model.createdAt!.year > 0 ||
+        today.month - model.createdAt!.month > 0 ||
+        today.day - model.createdAt!.day > 3) {
       return model;
     }
     return null;
