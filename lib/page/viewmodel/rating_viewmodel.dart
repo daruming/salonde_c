@@ -321,6 +321,7 @@ class RatingViewModel extends GetxController {
       List<FavoriteModel> tempList = [];
       matchingFavoritePersons.clear();
       waitingFavoritePersons.clear();
+      goneFavoritePersons.clear();
 
       _setState(_luvLetterViewState, Loading());
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
