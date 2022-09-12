@@ -95,11 +95,24 @@ class AuthViewModel extends GetxController {
     _user.value = null;
     // userModel.value = null;
     userModel = Rxn();
+    userModelUnderFivePeople = Rxn(null);
+    genderModelList.value = [];
+    genderModelListUnderFivePeople.value = [];
+    myGenderModelListForReRate.value = [];
+    myGenderModelListUnderFivePeopleForReRate.value = [];
     _setState(_homeViewState, Initial());
     _setState(_profileViewState, Initial());
     _setState(_loginScreenViewState, Initial());
+    _setState(_signUpViewState, Initial());
+    _setState(_signInViewState, Initial());
+    _setState(_discoveryViewState, Initial());
+    _uploadState = UploadState.initial.obs;
     // _setState(_homeViewState, Initial());
     _errorState = ErrorState.none;
+    loginScreenCheck = 0;
+    callingCheck = 0;
+    profileDataNullCheck = false;
+    _initNum = 0.obs;
   }
 
   Future<void> init() async {
