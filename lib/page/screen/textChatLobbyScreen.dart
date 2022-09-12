@@ -162,7 +162,7 @@ class _textChatLobbyScreenState extends State<textChatLobbyScreen>
                                           : "댓글이 ${textChatViewModel.textChatList[index].commentCount}개 있습니다",
                                       style:
                                           TextStyle(color: Color(0xffC4C4C4))),
-                                  trailing: Text(timeago.format(time2)),
+                                  //trailing: Text(timeago.format(time2)),
                                 )));
                       }),
                   const Center(

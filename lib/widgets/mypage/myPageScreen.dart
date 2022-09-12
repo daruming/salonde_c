@@ -62,10 +62,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                             Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                Text(
-                                  _authViewModel.userModel.value?.rating
-                                          .toString() ??
-                                      "",
+                                Text("${_authViewModel.userModel.value?.rating}점",
                                   style: TextStyle(
                                     color: Color(0xff365859),
                                     fontSize: 35,
@@ -160,28 +157,15 @@ class _MyPageScreenState extends State<MyPageScreen> {
           SliverFillRemaining(
               child: ListView(padding: EdgeInsets.all(30), children: [
             ListTile(
-                leading: const Icon(
-                  Icons.home,
-                ),
                 shape: Border(
                     bottom: BorderSide(
                   color: Colors.grey,
                 )),
-                title: const Text('재심사받기'),
+                title: Center(child: const Text('재심사받기')),
                 onTap: () {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => RatingScreen()));
                 }),
-            ListTile(
-                leading: const Icon(
-                  Icons.home,
-                ),
-                shape: Border(
-                    bottom: BorderSide(
-                  color: Colors.grey,
-                )),
-                title: const Text('지인연락처 차단'),
-                onTap: () {}),
             ListTile(
                 title: Center(
                     child: Text('로그아웃', style: TextStyle(color: Colors.white))),

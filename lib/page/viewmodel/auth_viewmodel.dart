@@ -47,6 +47,7 @@ class AuthViewModel extends GetxController {
   Rxn<UserModel> userModel = Rxn();
   Rx<CoinModel?> _userCoin = null.obs;
   CoinModel get userCoin => _userCoin.value!;
+  UserCredential? userCredentialKey;
 
   Rx<UploadState> _uploadState = UploadState.initial.obs;
   UploadState get uploadState => _uploadState.value;
@@ -74,6 +75,8 @@ class AuthViewModel extends GetxController {
   Rxn<UserModel> userModelUnderFivePeople = Rxn(null);
 
   bool profileDataNullCheck = false;
+  int loginScreenCheck = 0;
+  int callingCheck = 0;
   RxInt _initNum = 0.obs;
   int get initNum => _initNum.value;
 
@@ -92,10 +95,24 @@ class AuthViewModel extends GetxController {
     _user.value = null;
     // userModel.value = null;
     userModel = Rxn();
+    userModelUnderFivePeople = Rxn(null);
+    genderModelList.value = [];
+    genderModelListUnderFivePeople.value = [];
+    myGenderModelListForReRate.value = [];
+    myGenderModelListUnderFivePeopleForReRate.value = [];
     _setState(_homeViewState, Initial());
+    _setState(_profileViewState, Initial());
     _setState(_loginScreenViewState, Initial());
+    _setState(_signUpViewState, Initial());
+    _setState(_signInViewState, Initial());
+    _setState(_discoveryViewState, Initial());
+    _uploadState = UploadState.initial.obs;
     // _setState(_homeViewState, Initial());
     _errorState = ErrorState.none;
+    loginScreenCheck = 0;
+    callingCheck = 0;
+    profileDataNullCheck = false;
+    _initNum = 0.obs;
   }
 
   Future<void> init() async {
@@ -104,15 +121,22 @@ class AuthViewModel extends GetxController {
     userSignUpState.value = false;
     print(userModel);
     _currentUser();
-    await getUserInfo();
-    await getMainPageInfo(uid: user!.uid, gender: userModel.value!.gender);
-    await getMyCoins();
+    if (_user.value != null) {
+      await getUserInfo();
+      await getMainPageInfo(uid: user!.uid, gender: userModel.value!.gender);
+      await getMyCoins();
+    }
     // await userValueCheck();
   }
 
-  Future<void> userValueCheckInLoginScreen() async {
+  Future<void> userValueCheckInLoginScreen({int? loginScreenCheckNum}) async {
     _currentUser();
-    await getUserInfo();
+    if (loginScreenCheckNum != null) {
+      loginScreenCheck = loginScreenCheckNum;
+    }
+    if (_user.value != null) {
+      await getUserInfoForLoginSreen();
+    }
   }
 
   void userValueCheck() {
@@ -132,7 +156,35 @@ class AuthViewModel extends GetxController {
         (userModel.value!.imgUrl2 == '' || userModel.value!.imgUrl2 == null)) {
       _setState(_loginScreenViewState, Empty());
     } else {
-      _setState(_loginScreenViewState, Loaded());
+      // _setState(_loginScreenViewState, Loaded());
+    }
+  }
+
+  bool userValueCheckBool() {
+    if (userModel.value != null) {
+      if ((userModel.value!.profileImageUrl == '' ||
+              userModel.value!.profileImageUrl == null) ||
+          (userModel.value!.name == '' || userModel.value!.name == null) ||
+          (userModel.value!.job == '' || userModel.value!.job == null) ||
+          (userModel.value!.religion == '' ||
+              userModel.value!.religion == null) ||
+          (userModel.value!.bodytype == '' ||
+              userModel.value!.bodytype == null) ||
+          (userModel.value!.age == 0 || userModel.value!.age == null) ||
+          (userModel.value!.height == 0 || userModel.value!.height == null) ||
+          (userModel.value!.mbti == '' || userModel.value!.mbti == null) ||
+          (userModel.value!.name == '' || userModel.value!.name == null) ||
+          (userModel.value!.imgUrl1 == '' ||
+              userModel.value!.imgUrl1 == null) ||
+          (userModel.value!.imgUrl2 == '' ||
+              userModel.value!.imgUrl2 == null)) {
+        return true;
+      } else {
+        return false;
+        // _setState(_loginScreenViewState, Loaded());
+      }
+    } else {
+      return true;
     }
   }
 
@@ -182,7 +234,7 @@ class AuthViewModel extends GetxController {
 
       UserCredential userCredential = await _firebaseAuth
           .createUserWithEmailAndPassword(email: email, password: password);
-
+      userCredentialKey = userCredential;
       UserModel userModelTemp = UserModel(
         uid: userCredential.user?.uid ?? "",
         email: userCredential.user?.email ?? "",
@@ -239,6 +291,8 @@ class AuthViewModel extends GetxController {
 
       UserCredential userCredential = await _firebaseAuth
           .signInWithEmailAndPassword(email: email, password: password);
+      userCredentialKey = userCredential;
+
       _user.value = userCredential.user;
       // storage.write(key: "uid", value: userCredential.user!.uid);
       _setState(_signInViewState, Loaded());
@@ -380,24 +434,62 @@ class AuthViewModel extends GetxController {
   Future<void> getUserInfo(
       // required String uid,
       ) async {
-    try {
-      _setState(_profileViewState, Loading());
+    // if (_profileViewState.value is Loaded &&
+    //     _loginScreenViewState.value is Loaded) {
+    //   return;
+    // } else {
+    if (callingCheck == 0) {
+      try {
+        // _setState(_profileViewState, Loading());
+        callingCheck = 1;
+        DocumentSnapshot documentSnapshot = await _firebaseFirestore
+            .collection(FireStoreCollection.userCollection)
+            .doc(_user.value!.uid)
+            .get();
 
-      DocumentSnapshot documentSnapshot = await _firebaseFirestore
-          .collection(FireStoreCollection.userCollection)
-          .doc(_user.value!.uid)
-          .get();
-
-      if (documentSnapshot.data() != null) {
-        UserModel tempModel = UserModel.fromFirebase(documentSnapshot);
-        _setUserModel(userModel, tempModel);
-        // userModel.value = tempModel;
-        gender = userModel.value?.gender ?? "";
-        userValueCheck();
-        _setState(_profileViewState, Loaded());
+        if (documentSnapshot.data() != null) {
+          UserModel tempModel = UserModel.fromFirebase(documentSnapshot);
+          _setUserModel(userModel, tempModel);
+          // userModel.value = tempModel;
+          gender = userModel.value?.gender ?? "";
+          // userValueCheck();
+          // _setState(_profileViewState, Loaded());
+        }
+        callingCheck = 0;
+      } catch (e) {
+        _catchError(e);
       }
-    } catch (e) {
-      _catchError(e);
+    }
+    // }
+  }
+
+  Future<void> getUserInfoForLoginSreen(
+      // required String uid,
+      ) async {
+    if (_profileViewState.value is Loaded &&
+        _loginScreenViewState.value is Loaded) {
+      return;
+    } else {
+      try {
+        _setState(_profileViewState, Loading());
+
+        DocumentSnapshot documentSnapshot = await _firebaseFirestore
+            .collection(FireStoreCollection.userCollection)
+            .doc(_user.value!.uid)
+            .get();
+
+        if (documentSnapshot.data() != null) {
+          UserModel tempModel = UserModel.fromFirebase(documentSnapshot);
+          _setUserModel(userModel, tempModel);
+          // userModel.value = tempModel;
+          gender = userModel.value?.gender ?? "";
+          userValueCheck();
+          _setState(_profileViewState, Loaded());
+          _setState(_loginScreenViewState, Loaded());
+        }
+      } catch (e) {
+        _catchError(e);
+      }
     }
   }
 
