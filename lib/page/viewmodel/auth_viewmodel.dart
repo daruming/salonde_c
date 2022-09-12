@@ -76,6 +76,7 @@ class AuthViewModel extends GetxController {
 
   bool profileDataNullCheck = false;
   int loginScreenCheck = 0;
+  int callingCheck = 0;
   RxInt _initNum = 0.obs;
   int get initNum => _initNum.value;
 
@@ -424,24 +425,27 @@ class AuthViewModel extends GetxController {
     //     _loginScreenViewState.value is Loaded) {
     //   return;
     // } else {
-    try {
-      // _setState(_profileViewState, Loading());
+    if (callingCheck == 0) {
+      try {
+        // _setState(_profileViewState, Loading());
+        callingCheck = 1;
+        DocumentSnapshot documentSnapshot = await _firebaseFirestore
+            .collection(FireStoreCollection.userCollection)
+            .doc(_user.value!.uid)
+            .get();
 
-      DocumentSnapshot documentSnapshot = await _firebaseFirestore
-          .collection(FireStoreCollection.userCollection)
-          .doc(_user.value!.uid)
-          .get();
-
-      if (documentSnapshot.data() != null) {
-        UserModel tempModel = UserModel.fromFirebase(documentSnapshot);
-        _setUserModel(userModel, tempModel);
-        // userModel.value = tempModel;
-        gender = userModel.value?.gender ?? "";
-        // userValueCheck();
-        // _setState(_profileViewState, Loaded());
+        if (documentSnapshot.data() != null) {
+          UserModel tempModel = UserModel.fromFirebase(documentSnapshot);
+          _setUserModel(userModel, tempModel);
+          // userModel.value = tempModel;
+          gender = userModel.value?.gender ?? "";
+          // userValueCheck();
+          // _setState(_profileViewState, Loaded());
+        }
+        callingCheck = 0;
+      } catch (e) {
+        _catchError(e);
       }
-    } catch (e) {
-      _catchError(e);
     }
     // }
   }
