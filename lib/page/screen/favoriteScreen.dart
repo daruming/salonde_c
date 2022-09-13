@@ -45,6 +45,7 @@ class _FavoriteScreenState extends State<FavoriteScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       appBar: TabBar(
           controller: _tabController,
           labelColor: Colors.black,

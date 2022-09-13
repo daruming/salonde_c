@@ -158,7 +158,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
               child: ListView(padding: EdgeInsets.all(30), children: [
             ListTile(
                 shape: Border(
-                    bottom: BorderSide(
+                    top: BorderSide(
                   color: Colors.grey,
                 )),
                 title: Center(child: const Text('재심사받기')),

@@ -26,6 +26,7 @@ class _MatchingScreenState extends State<MatchingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xffFAFAFA),
       body: Obx(() {
         var viewState = _ratingViewModel.luvLetterViewState;
         if (viewState is Loading) {

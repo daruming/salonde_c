@@ -74,10 +74,7 @@ class _RatingScreenState extends State<RatingScreen> {
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Text(
-                              _authViewModel.userModel.value?.rating
-                                      .toString() ??
-                                  "" + '점',
+                            Text("${_authViewModel.userModel.value?.rating}점",
                               style: TextStyle(
                                 color: Color(0xff365859),
                                 fontSize: 50,

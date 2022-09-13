@@ -368,7 +368,7 @@ class RatingViewModel extends GetxController {
       }
       // gone 유저들
       for (var model in allGetFavoritePersons) {
-        var user = _over3daysFavoriteUser(model, now);
+        var user = _over1daysFavoriteUser(model, now);
         if (!model.matchingYn && user != null) {
           goneFavoritePersons.add(user);
         }
@@ -386,10 +386,10 @@ class RatingViewModel extends GetxController {
     }
   }
 
-  FavoriteModel? _over3daysFavoriteUser(FavoriteModel model, DateTime today) {
+  FavoriteModel? _over1daysFavoriteUser(FavoriteModel model, DateTime today) {
     if (model.createdAt!.year - today.year > 0 ||
         model.createdAt!.month - today.month > 0 ||
-        model.createdAt!.day - today.day > 3) {
+        model.createdAt!.day - today.day > 1) {
       return model;
     }
     return null;
@@ -604,7 +604,7 @@ class RatingViewModel extends GetxController {
       for (var model in genderList) {
         if (model.uid == targetUid) {
           var tempInt = (model.ratedPersonsLength ?? 0);
-          field['ratedPersonsLength'] = tempInt;
+          field['ratedPersonsLength'] = tempInt + 1;
           field['rating'] = model.rating! + rating;
           await _firebaseFirestore
               .collection(genderCollection)

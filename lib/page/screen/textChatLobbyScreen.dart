@@ -82,7 +82,7 @@ class _textChatLobbyScreenState extends State<textChatLobbyScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0xffF4F4F4),
+        backgroundColor: const Color(0xffFAFAFA),
         body: Column(children: <Widget>[
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),

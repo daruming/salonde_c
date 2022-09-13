@@ -17,15 +17,15 @@ class PassawayScreen extends StatefulWidget {
 class _PassawayScreenState extends State<PassawayScreen> {
   final AuthViewModel _authViewModel = Get.find<AuthViewModel>();
   final RatingViewModel _ratingViewModel = Get.find<RatingViewModel>();
-
-  List<String> images = [
-    "assets/image/image1_mask.png",
-    "assets/image/image4_mask.png",
-  ];
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xffFAFAFA),
       body: (_ratingViewModel.waitingFavoritePersons.length - 1 == 0)
           ? GridView.builder(
               //itemCount: images.length,
@@ -38,6 +38,7 @@ class _PassawayScreenState extends State<PassawayScreen> {
                   mainAxisSpacing: 12.0),
               itemBuilder: (BuildContext context, int index) {
                 var model = _findGenderModelwithGoneFavoritePersons(index);
+                
                 return GestureDetector(
                     onTap: () {
                       _ratingViewModel.isRatedPersons(targetUid: model.uid);
