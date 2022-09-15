@@ -31,7 +31,7 @@ class _MatchingScreenState extends State<MatchingScreen> {
         if (viewState is Loading) {
           return const ProgressWidget();
         }
-        return (_ratingViewModel.waitingFavoritePersons.length - 1 == 0)
+        return _ratingViewModel.waitingFavoritePersons.isNotEmpty
             ? GridView.builder(
                 //itemCount: _matchedList.length,
                 itemCount: _ratingViewModel.waitingFavoritePersons.length,

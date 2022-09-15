@@ -26,7 +26,7 @@ class _PassawayScreenState extends State<PassawayScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: (_ratingViewModel.waitingFavoritePersons.length - 1 == 0)
+      body: _ratingViewModel.goneFavoritePersons.isNotEmpty
           ? GridView.builder(
               //itemCount: images.length,
               itemCount: _ratingViewModel.goneFavoritePersons.length,
@@ -139,7 +139,7 @@ class _PassawayScreenState extends State<PassawayScreen> {
 
   _findGenderModelwithGoneFavoritePersons(int index) {
     for (var model in _authViewModel.genderModelList) {
-      if (model.uid == _ratingViewModel.waitingFavoritePersons[index].uid) {
+      if (model.uid == _ratingViewModel.goneFavoritePersons[index].uid) {
         return model;
       }
     }

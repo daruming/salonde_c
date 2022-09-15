@@ -266,6 +266,7 @@ class RatingViewModel extends GetxController {
       theOtherSideFavoriteModelForTheOther.name = userModel.name;
       theOtherSideFavoriteModelForTheOther.profileImageUrl =
           userModel.profileImageUrl;
+      theOtherSideFavoriteModelForTheOther.matchingYn = true;
 
 // 본인의 favorite_person
       await _firebaseFirestore
@@ -361,17 +362,26 @@ class RatingViewModel extends GetxController {
           matchingFavoritePersons.add(model);
         }
       }
-      // 내가 호감 보낸 것들
-      for (var model in temp2) {
-        if (!model.matchingYn) {
-          waitingFavoritePersons.add(model);
-        }
-      }
-      // gone 유저들
+      // gone 유저들  -   get_favorite_person 내가 안받은.
       for (var model in allGetFavoritePersons) {
         var user = _over3daysFavoriteUser(model, now);
         if (!model.matchingYn && user != null) {
           goneFavoritePersons.add(user);
+        }
+      }
+
+      // gone 유저들  -   favorite_person 상대가 안받은.
+      for (var model in temp2) {
+        var user = _over3daysFavoriteUser(model, now);
+        if (!model.matchingYn && user != null) {
+          goneFavoritePersons.add(user);
+        }
+      }
+      // 내가 호감 보낸 것들
+      for (var model in temp2) {
+        if (!model.matchingYn &&
+            (goneFavoritePersons.contains(model) == false)) {
+          waitingFavoritePersons.add(model);
         }
       }
 
@@ -605,7 +615,7 @@ class RatingViewModel extends GetxController {
       for (var model in genderList) {
         if (model.uid == targetUid) {
           var tempInt = (model.ratedPersonsLength ?? 0);
-          field['ratedPersonsLength'] = tempInt;
+          field['ratedPersonsLength'] = tempInt + 1;
           field['rating'] = model.rating! + rating;
           await _firebaseFirestore
               .collection(genderCollection)
